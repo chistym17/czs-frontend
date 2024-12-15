@@ -1,5 +1,3 @@
-import React from 'react'
-
 const Hero = () => {
   return (
     <div className="bg-gray-100 py-20">
@@ -15,7 +13,7 @@ const Hero = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Hero 
+export default Hero;
