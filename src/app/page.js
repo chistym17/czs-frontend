@@ -96,7 +96,7 @@ export default function Home() {
       </div>
       {/* Upcoming Events */}
       <div className="bg-white h-[400px] ">
-        <img src="../assets/photos/COVER2.png" />
+        <img src="/photos/COVER.png" />
       </div>
       {/* News & updates */}
       <div className="bg-white h-[400px]">
