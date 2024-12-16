@@ -1,7 +1,8 @@
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
-import page from "../player-card/page";
-const page = ({}) => {
+import PlayerCard from "@/components/PlayerCard";
+
+const PlayerDetailsPage = () => {
   const playerDetails = {
     picture: "https://via.placeholder.com/150", // Replace with the player's image URL
     name: "Lionel Messi",
@@ -10,6 +11,7 @@ const page = ({}) => {
     position: "Forward",
     jerseyNumber: 10,
   };
+
   return (
     <div>
       <Navbar />
@@ -21,4 +23,4 @@ const page = ({}) => {
   );
 };
 
-export default page;
+export default PlayerDetailsPage;
