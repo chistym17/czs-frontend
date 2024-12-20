@@ -1,11 +1,11 @@
 import Footer from "../components/Footer";
 import Hero from "../components/Hero";
 import Navbar from "../components/Navbar";
-
+import './globals.css'
 export default function Home() {
   return (
     <main>
-      <Navbar />
+      {/* <Navbar /> */}
       <Hero />
 
       {/* Team Info */}
