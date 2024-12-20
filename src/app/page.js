@@ -7,34 +7,7 @@ export default function Home() {
     <main>
       <Navbar />
       <Hero />
-      {/* Greeting  */}
-      <div className="h-[400px] bg-white p-5  text-black">
-        <h2 className="text-3xl flex items-center justify-center mt-5">
-          {" "}
-          WELCOME TO THE
-        </h2>
-        <h3 className="text-3xl flex items-center justify-center">
-          CZS SUPER CUP COMMUNITY
-        </h3>
-        <h4 className="flex items-center justify-center mt-2">
-          {" "}
-          Register Now to be a part of the CZS SuperCup{" "}
-        </h4>
-        <h3 className="text-3xl flex items-center justify-center mt-5">
-          We are excited to announce that the
-        </h3>
-        <h3 className="text-3xl flex items-center justify-center mt-2">
-          CZS SuperCup is now{" "}
-        </h3>
-        <h3 className="text-3xl flex items-center justify-center mt-2">
-          accepting team registrations!
-        </h3>
-        <div className="flex items-center justify-center mt-5">
-          <button className="btn btn-outline text-3xl font-sans text-black">
-            Register Now
-          </button>
-        </div>
-      </div>
+
       {/* Team Info */}
       <div className="bg-white h-[500px] text-black">
         <div className=" w-full flex-col lg:flex-row flex items-center justify-center gap-x-20 p-8">
@@ -94,10 +67,7 @@ export default function Home() {
           </div>
         </div>
       </div>
-      {/* Upcoming Events */}
-      <div className="bg-white h-[400px] ">
-        <img src="../assets/photos/COVER2.png" />
-      </div>
+
       {/* News & updates */}
       <div className="bg-white h-[400px]">
         <h1 className="flex items-center justify-center text-4xl  text-black">
