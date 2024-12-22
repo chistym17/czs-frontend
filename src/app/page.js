@@ -1,12 +1,16 @@
 import Footer from "../components/Footer";
 import Hero from "../components/Hero";
 import Navbar from "../components/Navbar";
+import LogoMarquee from "../components/LogoMarquee";
+import TeamRegistration from "../components/TeamRegistration";
 import './globals.css'
 export default function Home() {
   return (
     <main>
       {/* <Navbar /> */}
       <Hero />
+      <LogoMarquee />
+      <TeamRegistration />
 
       {/* Team Info */}
       <div className="bg-white h-[500px] text-black">
