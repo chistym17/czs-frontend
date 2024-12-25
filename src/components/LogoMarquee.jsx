@@ -23,9 +23,7 @@ const LogoMarquee = () => {
     <div className='py-16 bg-gradient-to-b from-gray-100 to-white'>
       <div className='container mx-auto px-4'>
         <div className='text-center mb-12'>
-          <h2 className='text-5xl font-bold text-gray-800 mb-4'>
-            32 Teams . One Champion
-          </h2>
+          <h2 className='text-5xl font-bold text-gray-800 mb-4'>32 TEAMS !</h2>
           <div className='w-24 h-1 bg-blue-600 mx-auto mb-6'></div>
           <p className='text-xl text-gray-600 max-w-2xl mx-auto'>
             Experience the thrill of competition as the best teams battle for
