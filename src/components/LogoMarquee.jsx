@@ -24,7 +24,7 @@ const LogoMarquee = () => {
       <div className='container mx-auto px-4'>
         <div className='text-center mb-12'>
           <h2 className='text-5xl font-bold text-gray-800 mb-4'>
-            32 Teams, One Champion
+            32 Teams . One Champion
           </h2>
           <div className='w-24 h-1 bg-blue-600 mx-auto mb-6'></div>
           <p className='text-xl text-gray-600 max-w-2xl mx-auto'>
@@ -36,7 +36,7 @@ const LogoMarquee = () => {
         <div className='bg-white rounded-xl shadow-lg p-8 mx-auto max-w-6xl'>
           <div className='bg-gradient-to-r from-gray-100 via-white to-gray-100 rounded-lg p-1'>
             <Marquee
-              speed={40}
+              speed={85}
               gradient={true}
               gradientColor={[255, 255, 255]}
               gradientWidth={50}
@@ -59,9 +59,7 @@ const LogoMarquee = () => {
         </div>
 
         <div className='flex justify-center mt-8 space-x-2'>
-          <div className='w-3 h-3 rounded-full bg-blue-600'></div>
-          <div className='w-3 h-3 rounded-full bg-blue-400'></div>
-          <div className='w-3 h-3 rounded-full bg-blue-600'></div>
+          <div className='w-24 h-1 bg-blue-600 mx-auto mb-6'></div>
         </div>
       </div>
     </div>
