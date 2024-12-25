@@ -20,20 +20,21 @@ const LogoMarquee = () => {
   ];
 
   return (
-    <div className="py-16 bg-gradient-to-b from-gray-100 to-white">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="text-5xl font-bold text-gray-800 mb-4">
+    <div className='py-16 bg-gradient-to-b from-gray-100 to-white'>
+      <div className='container mx-auto px-4'>
+        <div className='text-center mb-12'>
+          <h2 className='text-5xl font-bold text-gray-800 mb-4'>
             32 Teams, One Champion
           </h2>
-          <div className="w-24 h-1 bg-blue-600 mx-auto mb-6"></div>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Experience the thrill of competition as the best teams battle for glory in the CZS Super Cup
+          <div className='w-24 h-1 bg-blue-600 mx-auto mb-6'></div>
+          <p className='text-xl text-gray-600 max-w-2xl mx-auto'>
+            Experience the thrill of competition as the best teams battle for
+            glory in the CZS Super Cup
           </p>
         </div>
 
-        <div className="bg-white rounded-xl shadow-lg p-8 mx-auto max-w-6xl">
-          <div className="bg-gradient-to-r from-gray-100 via-white to-gray-100 rounded-lg p-1">
+        <div className='bg-white rounded-xl shadow-lg p-8 mx-auto max-w-6xl'>
+          <div className='bg-gradient-to-r from-gray-100 via-white to-gray-100 rounded-lg p-1'>
             <Marquee
               speed={40}
               gradient={true}
@@ -42,14 +43,14 @@ const LogoMarquee = () => {
               pauseOnHover={true}
             >
               {logos.map((logo, index) => (
-                <div 
-                  key={index} 
-                  className="mx-8 w-48 transform transition-transform hover:scale-110"
+                <div
+                  key={index}
+                  className='mx-8 w-48 transform transition-transform hover:scale-100'
                 >
-                  <img 
-                    src={logo} 
-                    alt={`Partner logo ${index + 1}`} 
-                    className="h-28 w-auto object-contain filter hover:brightness-110"
+                  <img
+                    src={logo}
+                    alt={`Partner logo ${index + 1}`}
+                    className='h-28 w-auto object-contain filter hover:brightness-110'
                   />
                 </div>
               ))}
@@ -57,14 +58,14 @@ const LogoMarquee = () => {
           </div>
         </div>
 
-        <div className="flex justify-center mt-8 space-x-2">
-          <div className="w-3 h-3 rounded-full bg-blue-600"></div>
-          <div className="w-3 h-3 rounded-full bg-blue-400"></div>
-          <div className="w-3 h-3 rounded-full bg-blue-600"></div>
+        <div className='flex justify-center mt-8 space-x-2'>
+          <div className='w-3 h-3 rounded-full bg-blue-600'></div>
+          <div className='w-3 h-3 rounded-full bg-blue-400'></div>
+          <div className='w-3 h-3 rounded-full bg-blue-600'></div>
         </div>
       </div>
     </div>
   );
 };
 
-export default LogoMarquee; 
+export default LogoMarquee;
