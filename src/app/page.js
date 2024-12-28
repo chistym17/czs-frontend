@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Footer from "../components/Footer";
 import Hero from "../components/Hero";
 import Navbar from "../components/Navbar";
@@ -30,9 +31,12 @@ export default function Home() {
           accepting team registrations!
         </h3>
         <div className="flex items-center justify-center mt-5">
-          <button className="btn btn-outline text-3xl font-sans text-black">
+          <Link
+            href="/reg"
+            className="btn btn-outline text-3xl font-sans text-black"
+          >
             Register Now
-          </button>
+          </Link>
         </div>
       </div>
       {/* Team Info */}
