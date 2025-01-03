@@ -1,6 +1,6 @@
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
-
+import Link from "next/link";
 const page = () => {
   return (
     <div className="bg-white">
@@ -58,9 +58,11 @@ const page = () => {
           </div>
 
           {/* Submit Button */}
-          <div className="form-control mt-6">
+          <Link href="/register/players">
+          <div className="form-control mt-6" >
             <button className="btn btn-primary w-full">Continue to Players Registration</button>
           </div>
+          </Link>
         </form>
       </div>
       <Footer />
