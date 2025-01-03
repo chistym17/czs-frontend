@@ -5,7 +5,7 @@ const page = () => {
   return (
     <div className="bg-white">
       <Navbar />
-      <div className="p-6 max-w-4xl mx-auto font-bold text-black">
+      <div className="p-6 max-w-4xl mx-auto font-bold text-black min-h-screen">
         <h1 className="text-3xl font-bold text-center mb-6">
           Team Registration
         </h1>
@@ -57,26 +57,9 @@ const page = () => {
             </div>
           </div>
 
-          {/* Player Names */}
-          <div className="form-control">
-            <label className="label font-semibold">
-              <span className="label-text">Player Names</span>
-            </label>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              {Array.from({ length: 16 }).map((_, index) => (
-                <input
-                  key={index}
-                  type="text"
-                  placeholder={`Player ${index + 1}`}
-                  className="input input-bordered w-full bg-gray-100"
-                />
-              ))}
-            </div>
-          </div>
-
           {/* Submit Button */}
           <div className="form-control mt-6">
-            <button className="btn btn-primary w-full">Register Team</button>
+            <button className="btn btn-primary w-full">Continue to Players Registration</button>
           </div>
         </form>
       </div>
