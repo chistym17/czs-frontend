@@ -1,6 +1,6 @@
-import Footer from "@/components/Footer";
-import Navbar from "@/components/Navbar";
-import PlayerCard from "@/components/PlayerCard";
+import Footer from "../../components/Footer";
+import Navbar from "../../components/Navbar";
+import PlayerCard from "../../components/PlayerCard";
 
 const PlayerDetailsPage = () => {
   const playerDetails = {

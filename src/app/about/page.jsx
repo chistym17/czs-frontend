@@ -1,5 +1,5 @@
-import Footer from "@/components/Footer";
-import Navbar from "@/components/Navbar";
+import Footer from "../../components/Footer";
+import Navbar from "../../components/Navbar";
 
 const page = () => {
   return (
@@ -76,9 +76,8 @@ const page = () => {
               <div key={index} className="card bg-white shadow-lg">
                 <div className="card-body items-center text-center">
                   <img
-                    src={`https://via.placeholder.com/150?text=${
-                      member.split(" ")[0]
-                    }`}
+                    src={`https://via.placeholder.com/150?text=${member.split(" ")[0]
+                      }`}
                     alt={member}
                     className="rounded-full mb-4 border-4 border-blue-500"
                   />

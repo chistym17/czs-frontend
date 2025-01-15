@@ -1,5 +1,5 @@
-import Footer from "@/components/Footer";
-import Navbar from "@/components/Navbar";
+import Footer from "../../components/Footer";
+import Navbar from "../../components/Navbar";
 import Link from "next/link";
 const page = () => {
   return (
@@ -10,7 +10,6 @@ const page = () => {
           Team Registration
         </h1>
         <form className="space-y-6 bg-white p-8 rounded-lg shadow-lg">
-          {/* Team Details */}
           <div className="form-control">
             <label className="label font-semibold">
               <span className="label-text">Team Name</span>
@@ -57,7 +56,6 @@ const page = () => {
             </div>
           </div>
 
-          {/* Submit Button */}
           <Link href="/register/players">
           <div className="form-control mt-6" >
             <button className="btn btn-primary w-full">Continue to Players Registration</button>

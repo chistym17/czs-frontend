@@ -1,9 +1,12 @@
 "use client"
 import { useState } from "react";
-import Footer from "@/components/Footer";
-import Navbar from "@/components/Navbar";
+import Footer from "../../../components/Footer";
+import Navbar from "../../../components/Navbar";
 
-const PlayersRegistration = ({ teamName, batchYear, captainName, viceCaptainName }) => {
+const PlayersRegistration = () => {
+  // You can get these values from URL params, context, or state management
+  // const { teamName, batchYear, captainName, viceCaptainName } = someStateOrContext;
+  
   const [players, setPlayers] = useState(Array(16).fill({
     name: "",
     image: "",
@@ -33,12 +36,10 @@ const PlayersRegistration = ({ teamName, batchYear, captainName, viceCaptainName
     <div className="bg-white">
       <Navbar />
       <div className="p-6 max-w-7xl mx-auto">
-        {/* Team Info and Instructions - Same as before */}
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-8">
           {players.map((player, index) => (
             <div key={index} className="bg-white rounded-xl shadow-lg overflow-hidden border border-blue-100 hover:shadow-2xl transition-shadow">
-              {/* Image Preview/Upload Section */}
               <div className="h-48 bg-blue-50 relative">
                 {player.image ? (
                   <img
@@ -123,7 +124,6 @@ const PlayersRegistration = ({ teamName, batchYear, captainName, viceCaptainName
                 </div>
               </div>
 
-              {/* Card Number Badge */}
               <div className="absolute top-2 right-2 bg-blue-600 text-white rounded-full w-7 h-7 flex items-center justify-center text-sm font-semibold shadow-lg">
                 {index + 1}
               </div>
@@ -131,7 +131,6 @@ const PlayersRegistration = ({ teamName, batchYear, captainName, viceCaptainName
           ))}
         </div>
 
-        {/* Submit Button */}
         <div className="mt-8 mb-16">
           <button 
             className={`btn btn-primary w-full ${!isFormComplete() ? 'btn-disabled opacity-50' : ''}`}
