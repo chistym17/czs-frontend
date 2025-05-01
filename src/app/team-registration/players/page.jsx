@@ -16,6 +16,8 @@ const PlayersRegistration = () => {
   const [completePlayers, setCompletePlayers] = useState([]);
 
   const handleNextPlayer = (playerData) => {
+    // Only add player and increment counter if we're below 16
+    // Always save the player data first
     let playerWithImage = { ...playerData };
     if (playerData.image && playerData.image.file) {
       playerWithImage = {
@@ -30,18 +32,22 @@ const PlayersRegistration = () => {
     const updatedPlayers = [...savedPlayers, playerWithImage];
     localStorage.setItem('players', JSON.stringify(updatedPlayers));
 
-    const nextPlayer = currentStep.player + 1;
-    localStorage.setItem('currentPlayer', nextPlayer);
-    setCurrentStep(prev => ({
-      ...prev,
-      player: nextPlayer
-    }));
+    // Only increment counter if we're below 16
+    if (currentStep.player < 16) {
+      const nextPlayer = currentStep.player + 1;
+      localStorage.setItem('currentPlayer', nextPlayer);
+      setCurrentStep(prev => ({
+        ...prev,
+        player: nextPlayer
+      }));
+    }
 
-    if (nextPlayer > 16) {
+    // Show complete button if we're at exactly 16
+    if (currentStep.player === 16) {
+      // Save the current player data first
       const playersData = JSON.parse(localStorage.getItem('players') || '[]');
       const completePlayers = playersData.map(player => {
         const matchingImage = playersData.find(p => p.image?.playerID === player.image?.playerID);
-
         return {
           id: player.image?.playerID || 'N/A',
           name: player.name,
@@ -50,8 +56,8 @@ const PlayersRegistration = () => {
           image: matchingImage?.image?.name || 'No image'
         };
       });
-      setRegistrationModalOpen(true);
       setCompletePlayers(completePlayers);
+      setRegistrationModalOpen(true);
     }
   };
 
