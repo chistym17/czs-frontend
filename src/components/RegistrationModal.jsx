@@ -24,10 +24,6 @@ const RegistrationModal = ({ onClose, teamData, completePlayers }) => {
       description: "Registering all 16 players. This may take 5-6 minutes..."
     },
     {
-      title: "Uploading Player Images",
-      description: "Uploading player photos. Please do not close the browser..."
-    },
-    {
       title: "Finalizing Registration",
       description: "Almost done! Finalizing your team registration..."
     }
@@ -67,22 +63,14 @@ const RegistrationModal = ({ onClose, teamData, completePlayers }) => {
       // If more than 16 players, only take the first 16
       const playersToSend = completePlayers.slice(0, 16);
 
-      // Create FormData for player images
+      // Create FormData with player details
       const formData = new FormData();
+      formData.append('players', JSON.stringify(playersToSend.map(player => ({
+        name: player.name,
+        position: player.position,
+        jerseyNumber: player.jerseyNumber
+      }))));
 
-      // Add players data (only first 16)
-      formData.append('players', JSON.stringify(playersToSend));
-
-      // Add player images with proper indexing (only first 16)
-      playersToSend.forEach((player, index) => {
-        if (player.image) {
-          formData.append(`playerImages[${index}]`, player.image);
-        }
-      });
-
-      console.log('Sending registration request...');
-
-      console.log(formData)
 
       const response = await fetch(`http://localhost:3001/api/teams/update-players/${teamId}`, {
         method: 'PUT',
@@ -140,8 +128,8 @@ const RegistrationModal = ({ onClose, teamData, completePlayers }) => {
             </div>
           </div>
           <div className="mb-6">
-            <h3 className="text-xl font-semibold mb-2">{steps[step - 1].title}</h3>
-            <p className="text-gray-600">{steps[step - 1].description}</p>
+            <h3 className="text-xl font-semibold mb-2">{steps[step - 1]?.title}</h3>
+            <p className="text-gray-600">{steps[step - 1]?.description}</p>
           </div>
           {step === 5 && (
             <div className="text-green-600 font-semibold">

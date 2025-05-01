@@ -5,15 +5,9 @@ import PlayerForm from "../../../components/PlayerForm";
 import RegistrationModal from "../../../components/RegistrationModal";
 
 const PlayersRegistration = () => {
-  // Get team data from localStorage
   const teamData = JSON.parse(localStorage.getItem('teamData') || '{}');
-
-  // Get current player index from localStorage
   const currentPlayer = parseInt(localStorage.getItem('currentPlayer')) || 1;
-
-  // Get saved players from localStorage
   const savedPlayers = JSON.parse(localStorage.getItem('players') || '[]');
-
   const [currentStep, setCurrentStep] = useState({
     player: currentPlayer,
     total: 16
@@ -22,12 +16,10 @@ const PlayersRegistration = () => {
   const [completePlayers, setCompletePlayers] = useState([]);
 
   const handleNextPlayer = (playerData) => {
-    // Save the image file path if it exists
     let playerWithImage = { ...playerData };
     if (playerData.image && playerData.image.file) {
-      // Store only the file name with player ID
-      playerWithImage = { 
-        ...playerData, 
+      playerWithImage = {
+        ...playerData,
         image: {
           name: playerData.image.name,
           playerID: currentStep.player
@@ -35,11 +27,9 @@ const PlayersRegistration = () => {
       };
     }
 
-    // Save current player data with image
     const updatedPlayers = [...savedPlayers, playerWithImage];
     localStorage.setItem('players', JSON.stringify(updatedPlayers));
 
-    // Update current player index
     const nextPlayer = currentStep.player + 1;
     localStorage.setItem('currentPlayer', nextPlayer);
     setCurrentStep(prev => ({
@@ -47,14 +37,11 @@ const PlayersRegistration = () => {
       player: nextPlayer
     }));
 
-    // If all players are registered, show registration modal
     if (nextPlayer > 16) {
-      // Create complete player objects with images
       const playersData = JSON.parse(localStorage.getItem('players') || '[]');
       const completePlayers = playersData.map(player => {
-        // Find the image that matches this player's ID
         const matchingImage = playersData.find(p => p.image?.playerID === player.image?.playerID);
-        
+
         return {
           id: player.image?.playerID || 'N/A',
           name: player.name,
@@ -63,8 +50,6 @@ const PlayersRegistration = () => {
           image: matchingImage?.image?.name || 'No image'
         };
       });
-
-      // Show registration modal
       setRegistrationModalOpen(true);
       setCompletePlayers(completePlayers);
     }
@@ -72,7 +57,6 @@ const PlayersRegistration = () => {
 
   const handleCloseModal = () => {
     setRegistrationModalOpen(false);
-    // Clear localStorage after successful registration
     localStorage.removeItem('players');
     localStorage.removeItem('currentPlayer');
     localStorage.removeItem('teamData');

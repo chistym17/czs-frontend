@@ -2,19 +2,14 @@
 
 import { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { FaUser, FaTshirt, FaCloudUploadAlt } from 'react-icons/fa';
-import { FaFutbol } from 'react-icons/fa6';
+import { FaUser, FaTshirt, FaFutbol } from 'react-icons/fa';
 
 const PlayerForm = ({ onNext, onPrevious, playerNumber, totalPlayers }) => {
   const [formData, setFormData] = useState({
     name: '',
     position: '',
-    jerseyNumber: '',
-    image: null
+    jerseyNumber: ''
   });
-
-  const [preview, setPreview] = useState(null);
-  const fileInputRef = useRef(null);
 
   const positions = [
     'GK', 'CB', 'RB', 'LB', 'CDM', 'CM', 'CAM',
@@ -29,51 +24,11 @@ const PlayerForm = ({ onNext, onPrevious, playerNumber, totalPlayers }) => {
     }));
   };
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setFormData(prev => ({
-        ...prev,
-        image: {
-          file: file,
-          name: file.name
-        }
-      }));
-
-      // Create preview URL
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreview(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const triggerFileInput = () => {
-    fileInputRef.current.click();
-  };
-
-  const removeImage = (e) => {
-    e.stopPropagation();
-    setFormData(prev => ({
-      ...prev,
-      image: null
-    }));
-    setPreview(null);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
-  };
-
   const validateForm = () => {
     if (!formData.name) return false;
     if (!formData.position) return false;
 
-    // Jersey number validation (optional)
-    if (formData.jerseyNumber &&
-      (isNaN(formData.jerseyNumber) ||
-        parseInt(formData.jerseyNumber) < 1 ||
-        parseInt(formData.jerseyNumber) > 99)) {
+    if (formData.jerseyNumber && isNaN(formData.jerseyNumber)) {
       return false;
     }
 
@@ -87,18 +42,13 @@ const PlayerForm = ({ onNext, onPrevious, playerNumber, totalPlayers }) => {
       setFormData({
         name: '',
         position: '',
-        jerseyNumber: '',
-        image: null
+        jerseyNumber: ''
       });
-      setPreview(null);
-      if (fileInputRef.current) {
-        fileInputRef.current.value = "";
-      }
     } else {
-      // Show validation errors
       alert("Please fill in all required fields correctly");
     }
   };
+
 
   const formVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -123,43 +73,6 @@ const PlayerForm = ({ onNext, onPrevious, playerNumber, totalPlayers }) => {
       </div>
 
       <div className="space-y-5">
-        {/* Player Image Upload */}
-        <div className="form-control">
-          <div
-            onClick={triggerFileInput}
-            className="flex flex-col items-center justify-center cursor-pointer bg-gray-50 border border-dashed border-gray-300 rounded-lg p-4 transition-all duration-200 hover:bg-gray-100"
-          >
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/*"
-              onChange={handleImageChange}
-              className="hidden"
-            />
-
-            {preview ? (
-              <div className="relative">
-                <img
-                  src={preview}
-                  alt="Player preview"
-                  className="h-24 w-24 object-cover rounded-full border-2 border-blue-500"
-                />
-                <button
-                  onClick={removeImage}
-                  className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs"
-                >
-                  ×
-                </button>
-              </div>
-            ) : (
-              <>
-                <FaCloudUploadAlt className="text-blue-500 text-3xl mb-2" />
-                <p className="text-sm text-gray-500">Upload player photo (optional)</p>
-              </>
-            )}
-          </div>
-        </div>
-
         <div className="form-control">
           <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-1">
             <FaUser className="text-blue-500 text-xs" /> Player Name <span className="text-red-500">*</span>
