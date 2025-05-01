@@ -4,11 +4,14 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { FaCopy, FaCheck } from 'react-icons/fa';
 
 const RegistrationModal = ({ onClose, teamData, completePlayers }) => {
   const [step, setStep] = useState(1);
   const [isProcessing, setIsProcessing] = useState(false);
   const [teamId, setTeamId] = useState(null);
+  const [isCopied, setIsCopied] = useState(false);
+  const [secretKey, setSecretKey] = useState('');
 
   const steps = [
     {
@@ -83,6 +86,8 @@ const RegistrationModal = ({ onClose, teamData, completePlayers }) => {
       const data = await response.json();
       console.log('Registration response:', data);
 
+      setSecretKey(data.secretKey);
+
       if (!response.ok) {
         throw new Error(data.message || 'Failed to register players');
       }
@@ -94,6 +99,12 @@ const RegistrationModal = ({ onClose, teamData, completePlayers }) => {
       toast.error(error.message);
       setIsProcessing(false);
     }
+  };
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(secretKey);
+    setIsCopied(true);
+    setTimeout(() => setIsCopied(false), 3000);
   };
 
   useEffect(() => {
@@ -113,7 +124,7 @@ const RegistrationModal = ({ onClose, teamData, completePlayers }) => {
       <motion.div
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        className="bg-white rounded-lg p-6 max-w-md w-full mx-auto"
+        className="bg-white rounded-lg p-6 max-w-3xl w-full mx-auto"
       >
         <div className="text-center">
           <h2 className="text-2xl font-bold mb-4 text-blue-600">
@@ -132,17 +143,49 @@ const RegistrationModal = ({ onClose, teamData, completePlayers }) => {
             <p className="text-gray-600">{steps[step - 1]?.description}</p>
           </div>
           {step === 5 && (
-            <div className="text-green-600 font-semibold">
-              Registration Complete! Your team is now registered.
+            <div className="space-y-4">
+              <div className="text-green-600 font-semibold mb-4">
+                Registration Complete! Your team is now registered.
+              </div>
+              <div className="bg-blue-50 p-4 rounded-lg">
+                <h3 className="text-lg font-semibold mb-2 text-blue-700">
+                  Important: Team Access Key
+                </h3>
+                <div className="bg-white p-4 rounded-lg shadow-sm">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm text-gray-600">
+                      This key will be shown only once. Save it for future team access.
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between p-2 bg-gray-50 rounded-lg">
+                    <span className="font-mono text-sm text-gray-800">
+                      {secretKey}
+                    </span>
+                    <button
+                      onClick={handleCopy}
+                      className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-medium bg-blue-100 hover:bg-blue-200 text-blue-700 transition-colors"
+                    >
+                      {isCopied ? (
+                        <>
+                          <FaCheck /> Copied
+                        </>
+                      ) : (
+                        <>
+                          <FaCopy /> Copy Key
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
           )}
           <div className="mt-6">
             <button
               onClick={onClose}
-              disabled={isProcessing}
               className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isProcessing && step < 5 ? 'Processing...' : 'Close'}
+              Close
             </button>
           </div>
         </div>

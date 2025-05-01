@@ -77,13 +77,13 @@ export default function PlayerRegistration() {
         }
 
         try {
-            const res = await fetch('http://localhost:3001/api/player/register', {
+            const res = fetch('http://localhost:3001/api/player/register', {
                 method: 'POST',
                 body: formData,
             });
 
             if (!res.ok) {
-                const errorData = await res.json().catch(() => ({}));
+                const errorData = res.json().catch(() => ({}));
                 throw new Error(errorData.message || 'Failed to register player');
             }
 

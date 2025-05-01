@@ -1,21 +1,36 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "../../../components/Navbar";
 import PlayerForm from "../../../components/PlayerForm";
 import RegistrationModal from "../../../components/RegistrationModal";
 
-const PlayersRegistration = () => {
-  const teamData = JSON.parse(localStorage.getItem('teamData') || '{}');
-  const currentPlayer = parseInt(localStorage.getItem('currentPlayer')) || 1;
-  const savedPlayers = JSON.parse(localStorage.getItem('players') || '[]');
+export default function PlayersRegistration() {
+  const [teamData, setTeamData] = useState({});
+  const [currentPlayer, setCurrentPlayer] = useState(1);
+  const [savedPlayers, setSavedPlayers] = useState([]);
   const [currentStep, setCurrentStep] = useState({
-    player: currentPlayer,
+    player: 1,
     total: 16
   });
   const [registrationModalOpen, setRegistrationModalOpen] = useState(false);
   const [completePlayers, setCompletePlayers] = useState([]);
 
-  const handleNextPlayer = (playerData) => {
+  useEffect(() => {
+    // Initialize from localStorage only on client side
+    const savedTeamData = JSON.parse(localStorage.getItem('teamData') || '{}');
+    const savedCurrentPlayer = parseInt(localStorage.getItem('currentPlayer')) || 1;
+    const savedPlayersData = JSON.parse(localStorage.getItem('players') || '[]');
+
+    setTeamData(savedTeamData);
+    setCurrentPlayer(savedCurrentPlayer);
+    setSavedPlayers(savedPlayersData);
+    setCurrentStep(prev => ({
+      ...prev,
+      player: savedCurrentPlayer
+    }));
+  }, []);
+
+  const handleNextPlayer = async (playerData) => {
     // Only add player and increment counter if we're below 16
     // Always save the player data first
     let playerWithImage = { ...playerData };
@@ -30,11 +45,13 @@ const PlayersRegistration = () => {
     }
 
     const updatedPlayers = [...savedPlayers, playerWithImage];
+    setSavedPlayers(updatedPlayers);
     localStorage.setItem('players', JSON.stringify(updatedPlayers));
 
     // Only increment counter if we're below 16
     if (currentStep.player < 16) {
       const nextPlayer = currentStep.player + 1;
+      setCurrentPlayer(nextPlayer);
       localStorage.setItem('currentPlayer', nextPlayer);
       setCurrentStep(prev => ({
         ...prev,
@@ -42,35 +59,62 @@ const PlayersRegistration = () => {
       }));
     }
 
+
     // Show complete button if we're at exactly 16
     if (currentStep.player === 16) {
-      // Save the current player data first
-      const playersData = JSON.parse(localStorage.getItem('players') || '[]');
-      const completePlayers = playersData.map(player => {
-        const matchingImage = playersData.find(p => p.image?.playerID === player.image?.playerID);
-        return {
-          id: player.image?.playerID || 'N/A',
-          name: player.name,
-          position: player.position,
-          jerseyNumber: player.jerseyNumber,
-          image: matchingImage?.image?.name || 'No image'
-        };
-      });
-      setCompletePlayers(completePlayers);
-      setRegistrationModalOpen(true);
+      // Save players to backend
+      try {
+        const response = await fetch('http://localhost:3001/api/teams/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(teamData)
+        });
+
+
+        if (!response.ok) {
+          throw new Error('Failed to register team');
+        }
+
+        const data = await response.json().catch(() => ({}));
+
+
+
+        setRegistrationModalOpen(true);
+        const playersData = JSON.parse(localStorage.getItem('players') || '[]');
+        const completePlayers = playersData.map(player => {
+          const matchingImage = playersData.find(p => p.image?.playerID === player.image?.playerID);
+          return {
+            id: player.image?.playerID || 'N/A',
+            name: player.name,
+            position: player.position,
+            jerseyNumber: player.jerseyNumber,
+            image: matchingImage?.image?.name || 'No image'
+          };
+        });
+        setCompletePlayers(completePlayers);
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Failed to register team. Please try again.');
+      }
     }
   };
 
   const handleCloseModal = () => {
     setRegistrationModalOpen(false);
+    setSavedPlayers([]);
+    setCurrentPlayer(1);
+    setTeamData({});
     localStorage.removeItem('players');
     localStorage.removeItem('currentPlayer');
     localStorage.removeItem('teamData');
-    window.location.href = "/team-registration/confirmation";
+    window.location.href = "/team-customization"
   };
 
   const handlePreviousPlayer = () => {
     const previousPlayer = currentStep.player - 1;
+    setCurrentPlayer(previousPlayer);
     localStorage.setItem('currentPlayer', previousPlayer);
     setCurrentStep(prev => ({
       ...prev,
@@ -82,7 +126,29 @@ const PlayersRegistration = () => {
     <div className="min-h-screen bg-gray-50">
       {registrationModalOpen && (
         <RegistrationModal
+          isOpen={registrationModalOpen}
           onClose={handleCloseModal}
+          step={currentStep.player}
+          steps={[
+            { title: 'Team Information', description: 'Team details registered successfully' },
+            { title: 'Player 1', description: 'Player 1 registered successfully' },
+            { title: 'Player 2', description: 'Player 2 registered successfully' },
+            { title: 'Player 3', description: 'Player 3 registered successfully' },
+            { title: 'Player 4', description: 'Player 4 registered successfully' },
+            { title: 'Player 5', description: 'Player 5 registered successfully' },
+            { title: 'Player 6', description: 'Player 6 registered successfully' },
+            { title: 'Player 7', description: 'Player 7 registered successfully' },
+            { title: 'Player 8', description: 'Player 8 registered successfully' },
+            { title: 'Player 9', description: 'Player 9 registered successfully' },
+            { title: 'Player 10', description: 'Player 10 registered successfully' },
+            { title: 'Player 11', description: 'Player 11 registered successfully' },
+            { title: 'Player 12', description: 'Player 12 registered successfully' },
+            { title: 'Player 13', description: 'Player 13 registered successfully' },
+            { title: 'Player 14', description: 'Player 14 registered successfully' },
+            { title: 'Player 15', description: 'Player 15 registered successfully' },
+            { title: 'Player 16', description: 'Player 16 registered successfully' },
+            { title: 'Complete', description: 'All players registered successfully' }
+          ]}
           teamData={teamData}
           completePlayers={completePlayers}
         />
@@ -163,5 +229,3 @@ const PlayersRegistration = () => {
     </div>
   );
 };
-
-export default PlayersRegistration;
