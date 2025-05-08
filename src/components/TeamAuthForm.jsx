@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { FaLock, FaUsers, FaExclamationTriangle } from 'react-icons/fa';
 
-const TeamAuthForm = () => {
+const TeamAuthForm = ({ onAuthenticate }) => {
   const [formData, setFormData] = useState({
     teamName: '',
     secretKey: ''
@@ -16,14 +16,13 @@ const TeamAuthForm = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.teamName || !formData.secretKey) {
       alert('Please fill in both team name and secret key');
       return;
     }
-    // Mock authentication
-    console.log('Authenticating:', formData);
+    onAuthenticate(formData.teamName, formData.secretKey);
   };
 
   return (

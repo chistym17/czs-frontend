@@ -35,7 +35,7 @@ const RegistrationModal = ({ onClose, teamData, completePlayers }) => {
   const handleTeamRegistration = async () => {
     try {
       setIsProcessing(true);
-      const response = await fetch('http://localhost:3001/api/teams/register', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/teams/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -58,15 +58,10 @@ const RegistrationModal = ({ onClose, teamData, completePlayers }) => {
   };
 
   const handlePlayersRegistration = async () => {
-    console.log('Team ID:', teamId);
-    console.log('Total players:', completePlayers);
 
 
     try {
-      // If more than 16 players, only take the first 16
       const playersToSend = completePlayers.slice(0, 16);
-
-      // Create FormData with player details
       const formData = new FormData();
       formData.append('players', JSON.stringify(playersToSend.map(player => ({
         name: player.name,
@@ -75,7 +70,7 @@ const RegistrationModal = ({ onClose, teamData, completePlayers }) => {
       }))));
 
 
-      const response = await fetch(`http://localhost:3001/api/teams/update-players/${teamId}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/teams/update-players/${teamId}`, {
         method: 'PUT',
         headers: {
           'Accept': 'application/json'
@@ -84,7 +79,6 @@ const RegistrationModal = ({ onClose, teamData, completePlayers }) => {
       });
 
       const data = await response.json();
-      console.log('Registration response:', data);
 
       setSecretKey(data.secretKey);
 

@@ -1,5 +1,7 @@
 "use client";
 import { useState } from "react";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Navbar from "../../components/Navbar";
 import TeamAuthForm from "../../components/TeamAuthForm";
 
@@ -9,21 +11,47 @@ const TeamCustomization = () => {
 
   const handleAuthentication = async (teamName, secretKey) => {
     try {
-      // Here you would make an API call to verify the team name and secret key
-      // For now, we'll simulate this with a simple check
-      const isValid = await verifyTeamCredentials(teamName, secretKey);
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/teams/verify-key`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ teamName, secretKey })
+      });
 
-      if (isValid) {
+      const data = await res.json();
+
+      if (data?.isValid) {
         setIsAuthenticated(true);
-        // Fetch team data from backend
-        const teamInfo = await fetchTeamData(teamName);
-        setTeamData(teamInfo);
+        setTeamData(data);
+        toast.success('Team authentication successful!', {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
       } else {
-        alert("Invalid team credentials. Please check your team name and secret key.");
+        toast.error(data.message || 'Failed to authenticate team', {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
       }
     } catch (error) {
       console.error("Authentication error:", error);
-      alert("An error occurred during authentication. Please try again.");
+      toast.error('An error occurred during authentication. Please try again.', {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
     }
   };
 
@@ -31,6 +59,7 @@ const TeamCustomization = () => {
     return (
       <div className="min-h-screen bg-gray-50">
         <Navbar />
+        <ToastContainer />
         <div className="max-w-4xl mx-auto px-4 py-8">
           <div className="bg-white rounded-lg shadow-lg p-6">
             <h1 className="text-2xl font-bold text-blue-600 mb-4">
@@ -54,6 +83,7 @@ const TeamCustomization = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
+      <ToastContainer />
       <div className="max-w-4xl mx-auto px-4 py-8">
         <div className="bg-white rounded-lg shadow-lg p-6">
           <h1 className="text-2xl font-bold text-blue-600 mb-4">
@@ -88,20 +118,6 @@ const TeamCustomization = () => {
       </div>
     </div>
   );
-};
-
-// Simulated functions - replace with actual API calls
-const verifyTeamCredentials = async (teamName, secretKey) => {
-  // Replace with actual backend verification
-  return true; // For testing
-};
-
-const fetchTeamData = async (teamName) => {
-  // Replace with actual API call
-  return {
-    teamName: teamName,
-    // Add other team data fields
-  };
 };
 
 export default TeamCustomization;

@@ -62,42 +62,19 @@ export default function PlayersRegistration() {
 
     // Show complete button if we're at exactly 16
     if (currentStep.player === 16) {
-      // Save players to backend
-      try {
-        const response = await fetch('http://localhost:3001/api/teams/register', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(teamData)
-        });
-
-
-        if (!response.ok) {
-          throw new Error('Failed to register team');
-        }
-
-        const data = await response.json().catch(() => ({}));
-
-
-
-        setRegistrationModalOpen(true);
-        const playersData = JSON.parse(localStorage.getItem('players') || '[]');
-        const completePlayers = playersData.map(player => {
-          const matchingImage = playersData.find(p => p.image?.playerID === player.image?.playerID);
-          return {
-            id: player.image?.playerID || 'N/A',
-            name: player.name,
-            position: player.position,
-            jerseyNumber: player.jerseyNumber,
-            image: matchingImage?.image?.name || 'No image'
-          };
-        });
-        setCompletePlayers(completePlayers);
-      } catch (error) {
-        console.error('Error:', error);
-        alert('Failed to register team. Please try again.');
-      }
+      setRegistrationModalOpen(true);
+      const playersData = JSON.parse(localStorage.getItem('players') || '[]');
+      const completePlayers = playersData.map(player => {
+        const matchingImage = playersData.find(p => p.image?.playerID === player.image?.playerID);
+        return {
+          id: player.image?.playerID || 'N/A',
+          name: player.name,
+          position: player.position,
+          jerseyNumber: player.jerseyNumber,
+          image: matchingImage?.image?.name || 'No image'
+        };
+      });
+      setCompletePlayers(completePlayers);
     }
   };
 
