@@ -1,13 +1,35 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Navbar from "../../components/Navbar";
 import TeamAuthForm from "../../components/TeamAuthForm";
+import TeamInfoHeader from "../../components/TeamInfoHeader";
+import PlayerGrid from "../../components/PlayerGrid";
 
 const TeamCustomization = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [teamData, setTeamData] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const fetchTeamData = async (teamName) => {
+    try {
+      setIsLoading(true);
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/teams/by-name/${encodeURIComponent(teamName)}`);
+      const data = await res.json();
+
+      if (data.success) {
+        setTeamData(data.data);
+      } else {
+        toast.error('Failed to fetch team data');
+      }
+    } catch (error) {
+      console.error("Error fetching team data:", error);
+      toast.error('An error occurred while fetching team data');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleAuthentication = async (teamName, secretKey) => {
     try {
@@ -23,7 +45,7 @@ const TeamCustomization = () => {
 
       if (data?.isValid) {
         setIsAuthenticated(true);
-        setTeamData(data);
+        await fetchTeamData(teamName);
         toast.success('Team authentication successful!', {
           position: "top-right",
           autoClose: 3000,
@@ -55,6 +77,14 @@ const TeamCustomization = () => {
     }
   };
 
+  const handleLogoUpload = (logoUrl) => {
+    setTeamData(prev => ({
+      ...prev,
+      logo: logoUrl
+    }));
+    toast.success('Team logo updated successfully!');
+  };
+
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-gray-50">
@@ -80,39 +110,33 @@ const TeamCustomization = () => {
     );
   }
 
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Navbar />
+        <div className="flex items-center justify-center h-[calc(100vh-64px)]">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
       <ToastContainer />
-      <div className="max-w-4xl mx-auto px-4 py-8">
-        <div className="bg-white rounded-lg shadow-lg p-6">
-          <h1 className="text-2xl font-bold text-blue-600 mb-4">
-            Team Customization Dashboard
-          </h1>
-          <p className="text-gray-600 mb-6">
-            Welcome, {teamData?.teamName}! You can now customize your team information.
-          </p>
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        {/* Team Info Header */}
+        <TeamInfoHeader 
+          teamData={teamData} 
+          onLogoUpload={handleLogoUpload}
+        />
 
-          {/* Main customization content will go here */}
-          <div className="space-y-6">
-            <div className="bg-blue-50 p-4 rounded-lg">
-              <h2 className="text-lg font-semibold mb-2">Team Information</h2>
-              <p className="text-gray-600">
-                Update your team logo, name, and other details.
-              </p>
-            </div>
-            <div className="bg-blue-50 p-4 rounded-lg">
-              <h2 className="text-lg font-semibold mb-2">Player Management</h2>
-              <p className="text-gray-600">
-                Update player photos, positions, and other information.
-              </p>
-            </div>
-            <div className="bg-blue-50 p-4 rounded-lg">
-              <h2 className="text-lg font-semibold mb-2">Team Statistics</h2>
-              <p className="text-gray-600">
-                View and update your team's performance metrics and statistics.
-              </p>
-            </div>
+        {/* Players Grid */}
+        <div className="mt-8">
+          <div className="bg-white rounded-xl shadow-lg p-6">
+            <h2 className="text-2xl font-bold text-gray-800 mb-6">Team Players</h2>
+            <PlayerGrid players={teamData?.players || []} />
           </div>
         </div>
       </div>

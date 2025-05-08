@@ -83,7 +83,7 @@ export default function PlayersRegistration() {
     setSavedPlayers([]);
     setCurrentPlayer(1);
     setTeamData({});
-    localStorage.removeItem('players');
+    // localStorage.removeItem('players');
     localStorage.removeItem('currentPlayer');
     localStorage.removeItem('teamData');
     window.location.href = "/team-customization"

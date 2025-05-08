@@ -62,6 +62,8 @@ const RegistrationModal = ({ onClose, teamData, completePlayers }) => {
 
     try {
       const playersToSend = completePlayers.slice(0, 16);
+
+      console.log('playersToSend', playersToSend);
       const formData = new FormData();
       formData.append('players', JSON.stringify(playersToSend.map(player => ({
         name: player.name,
@@ -77,6 +79,8 @@ const RegistrationModal = ({ onClose, teamData, completePlayers }) => {
         },
         body: formData
       });
+
+      console.log('response', response);
 
       const data = await response.json();
 
