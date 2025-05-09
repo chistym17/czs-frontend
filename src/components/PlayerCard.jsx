@@ -27,20 +27,22 @@ const PlayerCard = ({ player, teamId, onPlayerUpdate }) => {
 
   return (
     <>
-      <div className="relative w-64 h-96 bg-gradient-to-br from-gray-900 to-gray-800 rounded-xl overflow-hidden shadow-xl transform hover:scale-105 transition-transform duration-300">
+      <div className="relative w-72 h-[420px] bg-gradient-to-br from-gray-900 to-gray-800 rounded-xl overflow-hidden shadow-xl transform hover:scale-105 transition-transform duration-300">
         {/* Card Background Pattern */}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white to-transparent"></div>
         </div>
 
         {/* Player Image */}
-        <div className="relative h-48 w-full">
+        <div className="relative h-64 w-full">
           {player.image ? (
             <Image
               src={player.image}
               alt={player.name}
               fill
               className="object-cover"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              priority
             />
           ) : (
             <div className="w-full h-full bg-gray-700 flex items-center justify-center">
@@ -51,15 +53,15 @@ const PlayerCard = ({ player, teamId, onPlayerUpdate }) => {
 
         {/* Player Info */}
         <div className="p-4 text-white">
-          <div className="flex justify-between items-start mb-2">
-            <h3 className="text-xl font-bold truncate">{player.name}</h3>
-            <span className={`${getPositionColor(player.position)} text-white text-sm px-2 py-1 rounded-full`}>
+          <div className="flex justify-between items-start mb-3">
+            <h3 className="text-xl font-bold truncate max-w-[180px]">{player.name}</h3>
+            <span className={`${getPositionColor(player.position)} text-white text-sm px-3 py-1 rounded-full font-medium`}>
               {player.position}
             </span>
           </div>
           
           <div className="mt-4 space-y-2">
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center bg-white bg-opacity-10 rounded-lg p-2">
               <span className="text-gray-400">Jersey</span>
               <span className="text-xl font-bold">{player.jerseyNumber}</span>
             </div>
@@ -68,7 +70,7 @@ const PlayerCard = ({ player, teamId, onPlayerUpdate }) => {
           {/* Edit Button */}
           <button 
             onClick={() => setIsEditModalOpen(true)}
-            className="absolute bottom-4 right-4 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-full text-sm transition-colors"
+            className="absolute bottom-4 right-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm transition-colors shadow-lg"
           >
             Edit
           </button>
