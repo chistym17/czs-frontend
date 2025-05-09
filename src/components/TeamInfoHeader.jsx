@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { toast } from 'react-hot-toast';
 import EditTeamModal from './EditTeamModal';
@@ -7,6 +7,26 @@ const TeamInfoHeader = ({ team, onLogoUpload, onTeamUpdate }) => {
   const [isUploading, setIsUploading] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [teamData, setTeamData] = useState(team);
+  const [logoUrl, setLogoUrl] = useState(null);
+
+  useEffect(() => {
+    const fetchTeamLogo = async () => {
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/teams/team-logo/${teamData._id}`);
+        const data = await response.json();
+        console.log('data', data);
+        if (data.success && data.data.logoUrl) {
+          setLogoUrl(data.data.logoUrl);
+        }
+      } catch (error) {
+        console.error('Error fetching team logo:', error);
+      }
+    };
+
+    if (teamData?._id) {
+      fetchTeamLogo();
+    }
+  }, [teamData._id]);
 
   const handleLogoUpload = async (e) => {
     const file = e.target.files[0];
@@ -25,12 +45,14 @@ const TeamInfoHeader = ({ team, onLogoUpload, onTeamUpdate }) => {
     }
 
     setIsUploading(true);
+    const loadingToast = toast.loading('Updating team logo...');
+    
     try {
       const formData = new FormData();
       formData.append('logo', file);
       formData.append('teamId', teamData._id);
       
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/teams/upload-logo`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/teams/upload-team-logo`, {
         method: 'POST',
         body: formData,
       });
@@ -41,12 +63,14 @@ const TeamInfoHeader = ({ team, onLogoUpload, onTeamUpdate }) => {
 
       const data = await response.json();
       if (data.success) {
+        toast.dismiss(loadingToast);
         onLogoUpload(data.logoUrl);
-        toast.success('Team logo updated successfully!');
+        setLogoUrl(data.logoUrl);
       } else {
         throw new Error(data.message || 'Failed to upload logo');
       }
     } catch (error) {
+      toast.dismiss(loadingToast);
       console.error('Error uploading logo:', error);
       toast.error(error.message || 'Failed to upload logo');
     } finally {
@@ -84,9 +108,9 @@ const TeamInfoHeader = ({ team, onLogoUpload, onTeamUpdate }) => {
           {/* Team Logo and Info */}
           <div className="flex items-center space-x-6">
             <div className="relative w-32 h-32 bg-white rounded-full overflow-hidden group">
-              {teamData?.logo ? (
+              {logoUrl ? (
                 <Image
-                  src={teamData.logo}
+                  src={logoUrl}
                   alt={`${teamData.teamName} logo`}
                   fill
                   className="object-cover"

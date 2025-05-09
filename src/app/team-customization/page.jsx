@@ -14,6 +14,8 @@ const TeamCustomization = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [authenticatedTeamName, setAuthenticatedTeamName] = useState(null);
 
+
+
   const fetchTeamData = async (teamName) => {
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/teams/by-name/${encodeURIComponent(teamName)}`);
@@ -36,6 +38,7 @@ const TeamCustomization = () => {
 
   const handleAuthentication = async (teamName, secretKey) => {
     try {
+      
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/teams/verify-key`, {
         method: 'POST',
         headers: {
@@ -49,6 +52,7 @@ const TeamCustomization = () => {
       if (data?.isValid) {
         setIsAuthenticated(true);
         setAuthenticatedTeamName(teamName);
+        localStorage.setItem('isAuthenticated', 'true');
         await fetchTeamData(teamName);
         toast.success('Team authentication successful!', {
           position: "top-right",
