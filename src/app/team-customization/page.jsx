@@ -8,13 +8,25 @@ import PlayerGrid from "../../components/PlayerGrid";
 import { useParams } from 'next/navigation';
 
 const TeamCustomization = () => {
-  const { teamId } = useParams();
+  const [teamId, setTeamId] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [teamData, setTeamData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [authenticatedTeamName, setAuthenticatedTeamName] = useState(null);
 
-
+  useEffect(() => {
+    // Check for authentication in localStorage
+    const storedAuth = localStorage.getItem('isAuthenticated');
+    const storedTeamName = localStorage.getItem('authenticatedTeamName');
+    
+    if (storedAuth === 'true' && storedTeamName) {
+      setIsAuthenticated(true);
+      setAuthenticatedTeamName(storedTeamName);
+      fetchTeamData(storedTeamName);
+    } else {
+      setIsLoading(false);
+    }
+  }, []);
 
   const fetchTeamData = async (teamName) => {
     try {
@@ -25,6 +37,7 @@ const TeamCustomization = () => {
       const data = await response.json();
       if (data.success) {
         setTeamData(data.data);
+        setTeamId(data.data._id);
       } else {
         throw new Error(data.message || 'Failed to fetch team data');
       }
@@ -38,7 +51,6 @@ const TeamCustomization = () => {
 
   const handleAuthentication = async (teamName, secretKey) => {
     try {
-      
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/teams/verify-key`, {
         method: 'POST',
         headers: {
@@ -53,6 +65,7 @@ const TeamCustomization = () => {
         setIsAuthenticated(true);
         setAuthenticatedTeamName(teamName);
         localStorage.setItem('isAuthenticated', 'true');
+        localStorage.setItem('authenticatedTeamName', teamName);
         await fetchTeamData(teamName);
         toast.success('Team authentication successful!', {
           position: "top-right",
@@ -89,33 +102,9 @@ const TeamCustomization = () => {
   
   };
 
-  const handlePlayerUpdate = async (playerId, updatedPlayer) => {
-    try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/teams/${teamId}/players/${playerId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updatedPlayer),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to update player');
-      }
-
-      const data = await response.json();
-      if (data.success) {
-        setTeamData(prev => ({
-          ...prev,
-          players: prev.players.map(p => p._id === playerId ? data.data : p)
-        }));
-        toast.success('Player updated successfully');
-      } else {
-        throw new Error(data.message || 'Failed to update player');
-      }
-    } catch (error) {
-      toast.error('Error updating player');
-      console.error('Error:', error);
+  const handlePlayerUpdate = async () => {
+    if (authenticatedTeamName) {
+      await fetchTeamData(authenticatedTeamName);
     }
   };
 

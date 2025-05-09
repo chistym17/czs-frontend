@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { toast } from 'react-toastify';
 import Image from 'next/image';
+import { Toaster, toast } from 'react-hot-toast';
 
 const POSITIONS = [
   'GK', 'CB', 'RB', 'LB',
@@ -10,7 +10,7 @@ const POSITIONS = [
 ];
 
 const EditPlayerModal = ({ isOpen, onClose, player, teamId, onUpdate }) => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState({  
     name: player?.name || '',
     position: player?.position || '',
     jerseyNumber: player?.jerseyNumber || '',
@@ -78,6 +78,7 @@ const EditPlayerModal = ({ isOpen, onClose, player, teamId, onUpdate }) => {
     }
   };
 
+  //update player info
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -91,11 +92,13 @@ const EditPlayerModal = ({ isOpen, onClose, player, teamId, onUpdate }) => {
         body: JSON.stringify(formData)
       });
 
+
       const data = await response.json();
 
+
       if (data.success) {
-        onUpdate(data.data);
         toast.success('Player information updated successfully!');
+        onUpdate(data.data);
         onClose();
       } else {
         throw new Error(data.message || 'Failed to update player information');
