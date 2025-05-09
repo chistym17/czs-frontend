@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -12,6 +12,7 @@ const RegistrationModal = ({ onClose, teamData, completePlayers }) => {
   const [teamId, setTeamId] = useState(null);
   const [isCopied, setIsCopied] = useState(false);
   const [secretKey, setSecretKey] = useState('');
+  const registrationStarted = useRef(false);
 
   const steps = [
     {
@@ -33,6 +34,9 @@ const RegistrationModal = ({ onClose, teamData, completePlayers }) => {
   ];
 
   const handleTeamRegistration = async () => {
+    if (registrationStarted.current) return;
+    registrationStarted.current = true;
+    
     try {
       setIsProcessing(true);
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/teams/register`, {
@@ -54,42 +58,36 @@ const RegistrationModal = ({ onClose, teamData, completePlayers }) => {
     } catch (error) {
       toast.error(error.message);
       setIsProcessing(false);
+      registrationStarted.current = false;
     }
   };
 
   const handlePlayersRegistration = async () => {
-
-
     try {
+
       const playersToSend = completePlayers.slice(0, 16);
 
-      console.log('playersToSend', playersToSend);
-      const formData = new FormData();
-      formData.append('players', JSON.stringify(playersToSend.map(player => ({
-        name: player.name,
-        position: player.position,
-        jerseyNumber: player.jerseyNumber
-      }))));
-
-
+      
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/teams/update-players/${teamId}`, {
         method: 'PUT',
         headers: {
-          'Accept': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: formData
+        body: JSON.stringify({ players: playersToSend.map(player => ({
+          name: player.name,
+          position: player.position,
+          jerseyNumber: player.jerseyNumber
+        }))})
       });
 
-      console.log('response', response);
 
       const data = await response.json();
-
-      setSecretKey(data.secretKey);
 
       if (!response.ok) {
         throw new Error(data.message || 'Failed to register players');
       }
 
+      setSecretKey(data.secretKey);
       setStep(5);
       toast.success('All players registered successfully!');
     } catch (error) {
@@ -106,7 +104,7 @@ const RegistrationModal = ({ onClose, teamData, completePlayers }) => {
   };
 
   useEffect(() => {
-    if (step === 1) {
+    if (step === 1 && !registrationStarted.current) {
       handleTeamRegistration();
     } else if (step === 3) {
       handlePlayersRegistration();

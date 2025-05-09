@@ -1,5 +1,7 @@
 'use client';
 
+// this form is used to register players to the team
+
 import { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { FaUser, FaTshirt, FaFutbol } from 'react-icons/fa';
