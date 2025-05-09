@@ -56,6 +56,8 @@ const EditPlayerModal = ({ isOpen, onClose, player, teamId, onUpdate }) => {
     formData.append('playerId', player._id);
     formData.append('teamId', teamId);
 
+    toast.loading('Uploading image...');
+
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/teams/upload-player-image`, {
         method: 'POST',
@@ -63,7 +65,11 @@ const EditPlayerModal = ({ isOpen, onClose, player, teamId, onUpdate }) => {
       });
 
       const data = await response.json();
+
+      console.log(data)
+
       if (data.success) {
+        toast.dismiss();
         setFormData(prev => ({
           ...prev,
           image: data.imageUrl
