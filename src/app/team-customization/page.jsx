@@ -1,31 +1,34 @@
 "use client";
 import { useState, useEffect } from "react";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { Toaster, toast } from 'react-hot-toast';
 import Navbar from "../../components/Navbar";
 import TeamAuthForm from "../../components/TeamAuthForm";
 import TeamInfoHeader from "../../components/TeamInfoHeader";
 import PlayerGrid from "../../components/PlayerGrid";
+import { useParams } from 'next/navigation';
 
 const TeamCustomization = () => {
+  const { teamId } = useParams();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [teamData, setTeamData] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [authenticatedTeamName, setAuthenticatedTeamName] = useState(null);
 
   const fetchTeamData = async (teamName) => {
     try {
-      setIsLoading(true);
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/teams/by-name/${encodeURIComponent(teamName)}`);
-      const data = await res.json();
-
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/teams/by-name/${encodeURIComponent(teamName)}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch team data');
+      }
+      const data = await response.json();
       if (data.success) {
         setTeamData(data.data);
       } else {
-        toast.error('Failed to fetch team data');
+        throw new Error(data.message || 'Failed to fetch team data');
       }
     } catch (error) {
-      console.error("Error fetching team data:", error);
-      toast.error('An error occurred while fetching team data');
+      toast.error('Error loading team data');
+      console.error('Error:', error);
     } finally {
       setIsLoading(false);
     }
@@ -45,6 +48,7 @@ const TeamCustomization = () => {
 
       if (data?.isValid) {
         setIsAuthenticated(true);
+        setAuthenticatedTeamName(teamName);
         await fetchTeamData(teamName);
         toast.success('Team authentication successful!', {
           position: "top-right",
@@ -77,6 +81,40 @@ const TeamCustomization = () => {
     }
   };
 
+  const handleTeamUpdate = async (updatedTeam) => {
+  
+  };
+
+  const handlePlayerUpdate = async (playerId, updatedPlayer) => {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/teams/${teamId}/players/${playerId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedPlayer),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update player');
+      }
+
+      const data = await response.json();
+      if (data.success) {
+        setTeamData(prev => ({
+          ...prev,
+          players: prev.players.map(p => p._id === playerId ? data.data : p)
+        }));
+        toast.success('Player updated successfully');
+      } else {
+        throw new Error(data.message || 'Failed to update player');
+      }
+    } catch (error) {
+      toast.error('Error updating player');
+      console.error('Error:', error);
+    }
+  };
+
   const handleLogoUpload = (logoUrl) => {
     setTeamData(prev => ({
       ...prev,
@@ -89,7 +127,6 @@ const TeamCustomization = () => {
     return (
       <div className="min-h-screen bg-gray-50">
         <Navbar />
-        <ToastContainer />
         <div className="max-w-4xl mx-auto px-4 py-8">
           <div className="bg-white rounded-lg shadow-lg p-6">
             <h1 className="text-2xl font-bold text-blue-600 mb-4">
@@ -121,24 +158,50 @@ const TeamCustomization = () => {
     );
   }
 
+  if (!teamData) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-gray-800 text-2xl">Team not found</div>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Navbar />
-      <ToastContainer />
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* Team Info Header */}
+    <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
+      <Toaster
+        position="top-center"
+        toastOptions={{
+          duration: 5000,
+          style: {
+            borderRadius: '10px',
+            background: '#333',
+            color: '#fff',
+          },
+          success: {
+            iconTheme: {
+              primary: '#10B981',
+              secondary: '#FFFFFF',
+            },
+          },
+          error: {
+            iconTheme: {
+              primary: '#EF4444',
+              secondary: '#FFFFFF',
+            },
+          },
+        }}
+      />
+      <div className="max-w-7xl mx-auto space-y-8">
         <TeamInfoHeader 
-          teamData={teamData} 
+          team={teamData} 
+          onTeamUpdate={handleTeamUpdate}
           onLogoUpload={handleLogoUpload}
         />
-
-        {/* Players Grid */}
-        <div className="mt-8">
-          <div className="bg-white rounded-xl shadow-lg p-6">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6">Team Players</h2>
-            <PlayerGrid players={teamData?.players || []} />
-          </div>
-        </div>
+        <PlayerGrid 
+          players={teamData.players} 
+          teamId={teamId}
+          onPlayerUpdate={handlePlayerUpdate}
+        />
       </div>
     </div>
   );
