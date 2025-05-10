@@ -1,3 +1,4 @@
+'use client'
 import { useState } from 'react';
 import Image from 'next/image';
 import EditPlayerModal from './EditPlayerModal';
@@ -5,76 +6,44 @@ import EditPlayerModal from './EditPlayerModal';
 const PlayerCard = ({ player, teamId, onPlayerUpdate }) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
-  const getPositionColor = (position) => {
-    const colors = {
-      GK: 'bg-yellow-500',
-      CB: 'bg-red-500',
-      RB: 'bg-red-600',
-      LB: 'bg-red-600',
-      CDM: 'bg-blue-500',
-      CM: 'bg-blue-600',
-      CAM: 'bg-blue-700',
-      RM: 'bg-green-500',
-      LM: 'bg-green-500',
-      RW: 'bg-green-600',
-      LW: 'bg-green-600',
-      CF: 'bg-purple-500',
-      ST: 'bg-purple-600',
-      SS: 'bg-purple-700',
-    };
-    return colors[position] || 'bg-gray-500';
-  };
-
-  return (
-    <>
-      <div className="relative w-72 h-[420px] bg-gradient-to-br from-gray-900 to-gray-800 rounded-xl overflow-hidden shadow-xl transform hover:scale-105 transition-transform duration-300">
-        {/* Card Background Pattern */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white to-transparent"></div>
-        </div>
-
-        {/* Player Image */}
-        <div className="relative h-64 w-full">
-          {player.image ? (
-            <Image
-              src={player.image}
-              alt={player.name}
-              fill
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              priority
-            />
-          ) : (
-            <div className="w-full h-full bg-gray-700 flex items-center justify-center">
-              <span className="text-gray-400">No Photo</span>
-            </div>
-          )}
-        </div>
-
-        {/* Player Info */}
-        <div className="p-4 text-white">
-          <div className="flex justify-between items-start mb-3">
-            <h3 className="text-xl font-bold truncate max-w-[180px]">{player.name}</h3>
-            <span className={`${getPositionColor(player.position)} text-white text-sm px-3 py-1 rounded-full font-medium`}>
-              {player.position}
-            </span>
+ return (
+    <div className="relative group bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 w-72 h-[420px] overflow-hidden">
+      <div className="relative h-64 w-full overflow-hidden">
+        {player.image ? (
+          <Image
+            src={player.image}
+            alt={player.name}
+            fill
+            className="object-cover transition-transform duration-300 group-hover:scale-105"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            priority
+          />
+        ) : (
+          <div className="w-full h-full bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center">
+            <span className="text-4xl font-bold text-blue-200">{player.jerseyNumber}</span>
           </div>
-          
-          <div className="mt-4 space-y-2">
-            <div className="flex justify-between items-center bg-white bg-opacity-10 rounded-lg p-2">
-              <span className="text-gray-400">Jersey</span>
-              <span className="text-xl font-bold">{player.jerseyNumber}</span>
-            </div>
-          </div>
+        )}
+      </div>
 
-          {/* Edit Button */}
-          <button 
-            onClick={() => setIsEditModalOpen(true)}
-            className="absolute bottom-4 right-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm transition-colors shadow-lg"
-          >
-            Edit
-          </button>
+      <div className="p-4 space-y-3">
+        <div className="flex justify-between items-start">
+          <div className="space-y-1">
+            <h3 className="text-lg font-semibold text-gray-800 max-w-[180px] truncate">
+              {player.name}
+            </h3>
+            <p className="text-sm text-gray-500">{player.position}</p>
+          </div>
+          <div className="bg-blue-50 px-3 py-1 rounded-lg">
+            <span className="text-sm font-medium text-blue-600">#{player.jerseyNumber}</span>
+          </div>
         </div>
+
+        <button
+          onClick={() => setIsEditModalOpen(true)}
+          className="w-full py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 shadow-sm"
+        >
+          Edit Player
+        </button>
       </div>
 
       <EditPlayerModal
@@ -84,7 +53,7 @@ const PlayerCard = ({ player, teamId, onPlayerUpdate }) => {
         teamId={teamId}
         onUpdate={onPlayerUpdate}
       />
-    </>
+    </div>
   );
 };
 

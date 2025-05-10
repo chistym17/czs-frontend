@@ -5,7 +5,6 @@ import Navbar from "../../components/Navbar";
 import TeamAuthForm from "../../components/TeamAuthForm";
 import TeamInfoHeader from "../../components/TeamInfoHeader";
 import PlayerGrid from "../../components/PlayerGrid";
-import { useParams } from 'next/navigation';
 
 const TeamCustomization = () => {
   const [teamId, setTeamId] = useState(null);
@@ -15,7 +14,6 @@ const TeamCustomization = () => {
   const [authenticatedTeamName, setAuthenticatedTeamName] = useState(null);
 
   useEffect(() => {
-    // Check for authentication in localStorage
     const storedAuth = localStorage.getItem('isAuthenticated');
     const storedTeamName = localStorage.getItem('authenticatedTeamName');
     

@@ -31,32 +31,28 @@ const EditPlayerModal = ({ isOpen, onClose, player, teamId, onUpdate }) => {
     const file = e.target.files[0];
     if (!file) return;
 
-    // Validate file type
     if (!file.type.startsWith('image/')) {
       toast.error('Please upload an image file');
       return;
     }
 
-    // Validate file size (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
       toast.error('Image size should be less than 5MB');
       return;
     }
 
-    // Create preview
     const reader = new FileReader();
     reader.onloadend = () => {
       setImagePreview(reader.result);
     };
     reader.readAsDataURL(file);
 
-    // Upload image
     const formData = new FormData();
     formData.append('image', file);
     formData.append('playerId', player._id);
     formData.append('teamId', teamId);
 
-    toast.loading('Uploading image...');
+    toast.loading('Uploading image, please wait...');
 
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/teams/upload-player-image`, {

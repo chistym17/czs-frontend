@@ -64,9 +64,7 @@ const RegistrationModal = ({ onClose, teamData, completePlayers }) => {
 
   const handlePlayersRegistration = async () => {
     try {
-
       const playersToSend = completePlayers.slice(0, 16);
-
       
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/teams/update-players/${teamId}`, {
         method: 'PUT',
@@ -76,10 +74,10 @@ const RegistrationModal = ({ onClose, teamData, completePlayers }) => {
         body: JSON.stringify({ players: playersToSend.map(player => ({
           name: player.name,
           position: player.position,
-          jerseyNumber: player.jerseyNumber
+          jerseyNumber: player.jerseyNumber,
+          image: null  
         }))})
       });
-
 
       const data = await response.json();
 

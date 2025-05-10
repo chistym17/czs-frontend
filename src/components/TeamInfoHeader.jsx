@@ -14,8 +14,7 @@ const TeamInfoHeader = ({ team, onLogoUpload, onTeamUpdate }) => {
       try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/teams/team-logo/${teamData._id}`);
         const data = await response.json();
-        console.log('data', data);
-        if (data.success && data.data.logoUrl) {
+        if (data?.success && data?.data?.logoUrl) {
           setLogoUrl(data.data.logoUrl);
         }
       } catch (error) {
@@ -32,20 +31,18 @@ const TeamInfoHeader = ({ team, onLogoUpload, onTeamUpdate }) => {
     const file = e.target.files[0];
     if (!file) return;
 
-    // Validate file type
     if (!file.type.startsWith('image/')) {
       toast.error('Please upload an image file');
       return;
     }
 
-    // Validate file size (max 5MB)
-    if (file.size > 5 * 1024 * 1024) {
-      toast.error('Image size should be less than 5MB');
+    if (file.size > 8 * 1024 * 1024) {
+      toast.error('Image size should be less than 8MB');
       return;
     }
 
     setIsUploading(true);
-    const loadingToast = toast.loading('Updating team logo...');
+    const loadingToast = toast.loading('Updating team logo, please wait...');
     
     try {
       const formData = new FormData();
@@ -78,7 +75,6 @@ const TeamInfoHeader = ({ team, onLogoUpload, onTeamUpdate }) => {
     }
   };
 
-  //function to show the updated team info
 
   const handleUpdate = async (updatedTeam) => {
 
@@ -105,7 +101,6 @@ const TeamInfoHeader = ({ team, onLogoUpload, onTeamUpdate }) => {
     <>
       <div className="bg-gradient-to-r from-blue-600 to-blue-800 rounded-xl p-6 text-white shadow-lg">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-          {/* Team Logo and Info */}
           <div className="flex items-center space-x-6">
             <div className="relative w-32 h-32 bg-white rounded-full overflow-hidden group">
               {logoUrl ? (
@@ -147,7 +142,6 @@ const TeamInfoHeader = ({ team, onLogoUpload, onTeamUpdate }) => {
             </div>
           </div>
 
-          {/* Team Stats */}
           <div className="flex space-x-4">
             <div className="bg-white bg-opacity-10 rounded-lg p-4 text-center min-w-[120px]">
               <p className="text-sm font-medium text-blue-100">Total Players</p>
@@ -160,7 +154,6 @@ const TeamInfoHeader = ({ team, onLogoUpload, onTeamUpdate }) => {
           </div>
         </div>
 
-        {/* Quick Actions */}
         <div className="mt-6 flex justify-end space-x-4">
           <button 
             onClick={() => setIsEditModalOpen(true)}
