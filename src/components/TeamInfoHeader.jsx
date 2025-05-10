@@ -14,8 +14,8 @@ const TeamInfoHeader = ({ team, onLogoUpload, onTeamUpdate }) => {
       try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/teams/team-logo/${teamData._id}`);
         const data = await response.json();
-        if (data?.success && data?.data?.logoUrl) {
-          setLogoUrl(data.data.logoUrl);
+        if (data?.success && data?.data) {
+          setLogoUrl(data.data);
         }
       } catch (error) {
         console.error('Error fetching team logo:', error);
