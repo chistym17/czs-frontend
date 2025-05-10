@@ -55,7 +55,7 @@ const TeamRegistration = () => {
               tournament. Limited spots available for qualified teams.
             </p>
             <Link
-              href='/register'
+              href='/team-registration'
               className='inline-flex items-center px-8 py-4 text-lg font-semibold text-white bg-blue-600 rounded-full hover:bg-blue-700 transition-colors duration-200 shadow-md hover:shadow-lg'
             >
               Register Your Team

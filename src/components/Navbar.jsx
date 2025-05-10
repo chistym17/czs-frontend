@@ -23,10 +23,10 @@ const Navbar = () => {
             </li>
             <li>
               <a
-                href='/team-details'
+                href='/player-registration'
                 className='hover:text-blue-500 font-sans font-semibold  text-black'
               >
-                Teams
+                Player Registration
               </a>
             </li>
             <li>
