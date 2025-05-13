@@ -4,7 +4,7 @@ import { FaTrophy, FaCalendarAlt, FaUsers } from 'react-icons/fa';
 
 const TeamRegistration = () => {
   return (
-    <div className='py-20 bg-gradient-to-br from-blue-50 via-white to-blue-50'>
+    <div className='py-20 bg-gradient-to-b from-white to-blue-50'>
       <div className='container mx-auto px-4'>
         {/* Main Content */}
         <div className='max-w-5xl mx-auto text-center'>

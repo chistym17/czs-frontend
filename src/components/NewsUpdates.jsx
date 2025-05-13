@@ -8,7 +8,7 @@ const cardData = [
 
 const NewsSection = () => {
   return (
-    <section className='bg-white h-auto py-8'>
+    <section className='bg-gradient-to-b from-blue-50 to-white h-auto py-8'>
       <h1 className='h-[100px] flex items-center justify-center text-4xl text-black'>
         News & Updates
       </h1>

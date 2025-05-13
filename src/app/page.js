@@ -1,8 +1,7 @@
-
 import Footer from '../components/Footer';
 import Hero from '../components/Hero';
 import Navbar from '../components/Navbar';
-import LogoMarquee from '../components/LogoMarquee';
+import Briefing from '../components/Briefing';
 import TeamRegistration from '../components/TeamRegistration';
 import NewsUpdates from '../components/NewsUpdates';
 import './globals.css';
@@ -12,7 +11,7 @@ export default function Home() {
     <main>
       <Navbar />
       <Hero />
-      <LogoMarquee />
+      <Briefing />
       <TeamRegistration />
       <NewsUpdates />
       <Footer />

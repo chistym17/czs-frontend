@@ -7,8 +7,29 @@ const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [registrationDropdownOpen, setRegistrationDropdownOpen] =
     useState(false);
+  const [currentTextIndex, setCurrentTextIndex] = useState(0);
   const dropdownRef = useRef(null);
   const mobileMenuRef = useRef(null);
+
+  // Animation phrases
+  const animatedPhrases = [
+    "LET'S GO!!!",
+    'WE ARE!',
+    'CZSIANS!!',
+    'Win or Win!',
+    'GLORY!!',
+  ];
+
+  // Text animation effect
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTextIndex(
+        (prevIndex) => (prevIndex + 1) % animatedPhrases.length
+      );
+    }, 3000); // Change text every n seconds
+
+    return () => clearInterval(interval);
+  }, []);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -47,11 +68,21 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className='w-full bg-white shadow-md mt-2 p-2'>
+    <nav className='w-full bg-gradient-to-br from-blue-50 to-white mt-2 p-2'>
       <div className='container mx-auto px-3 py-3'>
         <div className='flex items-center justify-between'>
-          {/* Logo */}
-          <img src='/assets/logos/scup.png' alt='Logo' className='h-10' />
+          {/* Logo and animated text */}
+          <div className='flex items-center space-x-3'>
+            <img src='/assets/logos/scup.png' alt='Logo' className='h-10' />
+            <div className='animated-text-container overflow-hidden h-8'>
+              <div
+                className='text-sky-600 font-bold text-lg transition-all duration-500 animate-typing py-1'
+                style={{ opacity: 1 }}
+              >
+                {animatedPhrases[currentTextIndex]}
+              </div>
+            </div>
+          </div>
 
           {/* Desktop menu */}
           <ul className='hidden md:flex items-center space-x-6'>
@@ -141,7 +172,12 @@ const Navbar = () => {
         }`}
       >
         <div className='p-4 flex justify-between items-center border-b'>
-          <img src='/assets/logos/scup.png' alt='Logo' className='h-8' />
+          <div className='flex items-center space-x-2'>
+            <img src='/assets/logos/scup.png' alt='Logo' className='h-8' />
+            <div className='text-blue-600 font-bold text-sm'>
+              {animatedPhrases[currentTextIndex]}
+            </div>
+          </div>
           <button
             className='text-gray-600 hover:text-blue-500'
             onClick={() => setMobileMenuOpen(false)}
@@ -230,6 +266,36 @@ const Navbar = () => {
           onClick={() => setMobileMenuOpen(false)}
         />
       )}
+
+      {/* Add a small bit of CSS for the animation */}
+      <style jsx>{`
+        @keyframes fadeInOut {
+          0% {
+            opacity: 0;
+            transform: translateY(10px);
+          }
+          10% {
+            opacity: 1;
+            transform: translateY(0);
+          }
+          90% {
+            opacity: 1;
+            transform: translateY(0);
+          }
+          100% {
+            opacity: 0;
+            transform: translateY(-10px);
+          }
+        }
+
+        .animated-text-container {
+          overflow: hidden;
+        }
+
+        .animate-pulse {
+          animation: fadeInOut 2s ease-in-out;
+        }
+      `}</style>
     </nav>
   );
 };

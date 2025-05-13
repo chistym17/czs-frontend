@@ -105,7 +105,7 @@ export default function PlayerRegistration() {
   return (
     <div>
       <Navbar />
-      <div className='min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 to-indigo-200 py-8 px-4 sm:px-6 lg:px-8'>
+      <div className='min-h-screen flex items-center justify-center bg-gradient-to-b from-blue-50 to-white py-8 px-4 sm:px-6 lg:px-8'>
         <div className='w-full max-w-xl'>
           <Toaster
             position='top-center'
