@@ -49,14 +49,14 @@ export default function AdminDashboard() {
       >
         <nav className="p-6 space-y-4 text-blue-800">
           <button
-            onClick={() => router.push("/admin/upload-fixtures")}
+            onClick={() => router.push("/admin/upload-fixture")}
             className="flex items-center gap-3 w-full text-left px-4 py-2 rounded-lg hover:bg-blue-50 hover:text-blue-900"
           >
             <UploadCloud className="h-5 w-5" />
             Upload Fixtures
           </button>
           <button
-            onClick={() => router.push("/admin/upload-results")}
+            onClick={() => router.push("/admin/upload-result")}
             className="flex items-center gap-3 w-full text-left px-4 py-2 rounded-lg hover:bg-blue-50 hover:text-blue-900"
           >
             <FileText className="h-5 w-5" />
