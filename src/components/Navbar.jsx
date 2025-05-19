@@ -145,7 +145,7 @@ const Navbar = () => {
             </ul>
 
             {/* Admin Login Button */}
-            <Link href="http://localhost:3000/admin/login">
+            <Link href={`/admin/login`}>
               <button className="ml-6 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md transition duration-200 ease-in-out flex items-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -283,7 +283,7 @@ const Navbar = () => {
 
           {/* Admin Login in mobile menu */}
           <div className="border-t mt-2 pt-2">
-            <Link href="http://localhost:3000/admin/login">
+            <Link href={"/admin/login"}>
               <div
                 className="flex items-center px-4 py-3 bg-blue-50 hover:bg-blue-100 font-sans font-semibold text-blue-600"
                 onClick={() => setMobileMenuOpen(false)}
