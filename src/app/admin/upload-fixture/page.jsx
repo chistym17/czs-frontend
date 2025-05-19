@@ -1,142 +1,3 @@
-// // 📁 src/app/admin/upload-fixture/page.jsx
-// "use client";
-
-// import axios from "axios";
-// import { useEffect, useState } from "react";
-
-// export default function UploadFixture() {
-//   const [file, setFile] = useState(null);
-//   const [url, setUrl] = useState("");
-//   const [loading, setLoading] = useState(false);
-//   const [error, setError] = useState("");
-//   const [fixtures, setFixtures] = useState([]);
-//   const [matchTitle, setMatchTitle] = useState("");
-//   const [matchDate, setMatchDate] = useState("");
-
-//   useEffect(() => {
-//     fetchFixtures();
-//   }, []);
-
-//   const fetchFixtures = async () => {
-//     try {
-//       const res = await axios.get("http://localhost:5001/list-fixtures", {
-//         headers: { Authorization: "Bearer admin123" },
-//       });
-//       setFixtures(res.data);
-//     } catch (err) {
-//       console.error("Fetch error:", err);
-//     }
-//   };
-
-//   const handleUpload = async () => {
-//     if (!file) return;
-
-//     const formData = new FormData();
-//     formData.append("fixture", file);
-//     formData.append("matchTitle", matchTitle);
-//     formData.append("matchDate", matchDate);
-
-//     setLoading(true);
-//     setError("");
-
-//     try {
-//       const res = await axios.post(
-//         "http://localhost:5001/upload-fixture",
-//         formData,
-//         {
-//           headers: {
-//             Authorization: "Bearer admin123",
-//           },
-//         }
-//       );
-//       setUrl(res.data.url);
-//       setMatchTitle("");
-//       setMatchDate("");
-//       fetchFixtures();
-//     } catch (err) {
-//       setError(err.response?.data?.error || "Upload failed");
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   return (
-//     <div className="p-8">
-//       <h1 className="text-xl font-bold mb-4">Admin Upload Fixture</h1>
-
-//       <input
-//         type="text"
-//         placeholder="Match Title"
-//         value={matchTitle}
-//         onChange={(e) => setMatchTitle(e.target.value)}
-//         className="block mb-2 border p-2 w-full"
-//       />
-
-//       <input
-//         type="date"
-//         value={matchDate}
-//         onChange={(e) => setMatchDate(e.target.value)}
-//         className="block mb-2 border p-2 w-full"
-//       />
-
-//       <input
-//         type="file"
-//         accept=".jpg,.jpeg"
-//         onChange={(e) => setFile(e.target.files?.[0] || null)}
-//       />
-
-//       <button
-//         onClick={handleUpload}
-//         className="mt-4 bg-blue-600 text-white px-4 py-2 rounded"
-//         disabled={loading}
-//       >
-//         {loading ? "Uploading..." : "Upload"}
-//       </button>
-
-//       {error && <p className="text-red-500 mt-2">{error}</p>}
-//       {url && (
-//         <div className="mt-4">
-//           <p>Uploaded Fixture:</p>
-//           <img src={url} className="mt-2 border rounded" alt="Fixture" />
-//         </div>
-//       )}
-
-//       <div className="mt-8">
-//         <h3 className="text-lg font-bold mb-2">Uploaded Fixtures</h3>
-//         <div className="grid grid-cols-2 gap-4">
-//           {fixtures.map((img, i) => (
-//             <div key={i} className="relative border p-2">
-//               <img src={img.url} alt="fixture" className="w-full rounded" />
-//               <p className="text-sm font-semibold mt-1">{img.matchTitle}</p>
-//               <p className="text-xs text-gray-500">
-//                 {new Date(img.matchDate).toDateString()}
-//               </p>
-//               <button
-//                 className="absolute top-1 right-1 bg-red-500 text-white px-2 py-1 text-xs rounded"
-//                 onClick={async () => {
-//                   try {
-//                     await axios.delete(
-//                       `http://localhost:5001/delete-fixture/${img._id}`,
-//                       {
-//                         headers: { Authorization: "Bearer admin123" },
-//                       }
-//                     );
-//                     fetchFixtures();
-//                   } catch (err) {
-//                     console.error("Delete failed", err);
-//                   }
-//                 }}
-//               >
-//                 Delete
-//               </button>
-//             </div>
-//           ))}
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
-// 📁 src/app/admin/upload-fixture/page.jsx
 "use client";
 
 import axios from "axios";
@@ -157,9 +18,12 @@ export default function UploadFixture() {
 
   const fetchFixtures = async () => {
     try {
-      const res = await axios.get("http://localhost:5001/list-fixtures", {
-        headers: { Authorization: "Bearer admin123" },
-      });
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_ADMIN_URL}/list-fixtures`,
+        {
+          headers: { Authorization: `Bearer ${process.env.NEXT_PUBLIC_ADMIN_TOKEN}` },
+        }
+      );
       setFixtures(res.data);
     } catch (err) {
       console.error("Fetch error:", err);
@@ -179,11 +43,11 @@ export default function UploadFixture() {
 
     try {
       const res = await axios.post(
-        "http://localhost:5001/upload-fixture",
+        `${process.env.NEXT_PUBLIC_ADMIN_URL}/upload-fixture`,
         formData,
         {
           headers: {
-            Authorization: "Bearer admin123",
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_ADMIN_TOKEN}`,
           },
         }
       );
@@ -426,9 +290,11 @@ export default function UploadFixture() {
                     onClick={async () => {
                       try {
                         await axios.delete(
-                          `http://localhost:5001/delete-fixture/${img._id}`,
+                          `${process.env.NEXT_PUBLIC_ADMIN_URL}/delete-fixture/${img._id}`,
                           {
-                            headers: { Authorization: "Bearer admin123" },
+                            headers: {
+                              Authorization: `Bearer ${process.env.NEXT_PUBLIC_ADMIN_TOKEN}`,
+                            },
                           }
                         );
                         fetchFixtures();
