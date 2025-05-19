@@ -14,9 +14,12 @@ export default function MatchResults() {
   const fetchResults = async () => {
     try {
       setLoading(true);
-      const res = await axios.get("http://localhost:5001/list-results", {
-        headers: { Authorization: "Bearer admin123" },
-      });
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_ADMIN_URL}/list-results`,
+        {
+          headers: { Authorization: `Bearer ${process.env.NEXT_PUBLIC_ADMIN_TOKEN}` },
+        }
+      );
       setResults(res.data);
     } catch (err) {
       console.error("Error loading results:", err);
