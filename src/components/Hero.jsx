@@ -1,5 +1,6 @@
 import '../app/globals.css';
 import Marquee from 'react-fast-marquee';
+import Image from 'next/image';
 
 const Hero = () => {
   const logos = [
@@ -22,34 +23,46 @@ const Hero = () => {
 
   return (
     <div className='relative'>
-      <div
-        className='h-[65vh] bg-cover bg-center bg-no-repeat relative'
-        style={{ backgroundImage: "url('/assets/photos/COVER.png')" }}
-      >
-        <div className='absolute inset-0'></div>
+      <div className='h-[65vh] relative'>
+        <Image
+          src="/assets/photos/COVER.png"
+          alt="Hero background"
+          fill
+          priority
+          quality={75}
+          sizes="100vw"
+          className="object-cover object-center"
+          placeholder="blur"
+          blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDABQODxIPDRQSEBIXFRQdHx4eHRoaHSQtJSEkMjU1LS0yMi4qLjgyPj4+Oj4+Oj4+Oj4+Oj4+Oj4+Oj4+Oj7/2wBDAR4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAb/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
+        />
+      </div>
 
-        {/* Compact, centered marquee */}
-        <div className='absolute left-1/2 bottom-[-48px] sm:bottom-[-60px] transform -translate-x-1/2 z-20 w-[90%] sm:w-[85%] md:w-[75%]'>
-          <div className='mx-auto bg-blue rounded-lg shadow-md p-1 sm:p-2 max-w-[700px]'>
-            <div className='relative overflow-hidden'>
-              {/* Fade edges */}
-              <div className='pointer-events-none absolute inset-0 z-10 bg-gradient-to-r from-white/30 via-transparent to-white/30' />
+      {/* Compact, centered marquee */}
+      <div className='absolute left-1/2 bottom-[-48px] sm:bottom-[-60px] transform -translate-x-1/2 z-20 w-[90%] sm:w-[85%] md:w-[75%]'>
+        <div className='mx-auto bg-blue rounded-lg shadow-md p-1 sm:p-2 max-w-[700px]'>
+          <div className='relative overflow-hidden'>
+            {/* Fade edges */}
+            <div className='pointer-events-none absolute inset-0 z-10 bg-gradient-to-r from-white/30 via-transparent to-white/30' />
 
-              <Marquee speed={70} gradient={false} pauseOnHover={true}>
-                {logos.map((logo, index) => (
-                  <div
-                    key={index}
-                    className='mx-12 sm:mx-8 w-16 sm:w-20 transform transition-transform hover:scale-105'
-                  >
-                    <img
-                      src={logo}
-                      alt={`Partner logo ${index + 1}`}
-                      className='h-50 sm:h-50 w-auto object-contain filter drop-shadow-sm hover:brightness-105'
-                    />
-                  </div>
-                ))}
-              </Marquee>
-            </div>
+            <Marquee speed={70} gradient={false} pauseOnHover={true}>
+              {logos.map((logo, index) => (
+                <div
+                  key={index}
+                  className='mx-12 sm:mx-8 w-16 sm:w-20 transform transition-transform hover:scale-105'
+                >
+                  <Image
+                    src={logo}
+                    alt={`Partner logo ${index + 1}`}
+                    width={80}
+                    height={80}
+                    loading="lazy"
+                    quality={75}
+                    className='h-50 sm:h-50 w-auto object-contain filter drop-shadow-sm hover:brightness-105'
+                    sizes="(max-width: 640px) 64px, 80px"
+                  />
+                </div>
+              ))}
+            </Marquee>
           </div>
         </div>
       </div>
