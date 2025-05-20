@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Footer from '../../components/Footer';
 import Navbar from '../../components/Navbar';
+import { fetchTeams } from '../../config/api';
 
 // Additional styles to make it more responsive for smaller screens
 const mediaStyles = `
@@ -26,12 +27,15 @@ const mediaStyles = `
   }
 `;
 
-const TeamCard = ({ logo, name, year, id }) => {
+const TeamCard = ({ teamLogo, teamName, batchYear, _id }) => {
   const router = useRouter();
+  const [imgError, setImgError] = useState(false);
 
   const handleClick = () => {
-    router.push(`/team-details`); //router.push(`/teams/${id}`);
+    router.push(`/teams/${_id}`);
   };
+
+  const shouldShowImage = teamLogo && teamLogo.trim() !== '';
 
   return (
     <div
@@ -44,19 +48,29 @@ const TeamCard = ({ logo, name, year, id }) => {
         className='h-48 w-full relative bg-gray-50 flex items-center justify-center p-4 
       transition-all duration-300 hover:bg-blue-50'
       >
-        <Image
-          src={logo}
-          alt={`${name} logo`}
-          width={160}
-          height={160}
-          objectFit='contain'
-          className='max-h-40 transition-transform duration-300 hover:scale-110'
-        />
+        {shouldShowImage && !imgError ? (
+          <Image
+            src={teamLogo}
+            alt={`${teamName} logo`}
+            width={160}
+            height={160}
+            loading="lazy"
+            quality={75}
+            className='max-h-40 transition-transform duration-300 hover:scale-110 object-contain'
+            onError={() => setImgError(true)}
+          />
+        ) : (
+          <div className="w-40 h-40 bg-gray-200 rounded-full flex items-center justify-center">
+            <span className="text-4xl font-bold text-gray-400">
+              {teamName.charAt(0)}
+            </span>
+          </div>
+        )}
       </div>
       <div className='p-4 flex-1 flex flex-col justify-between border-t border-blue-100'>
-        <h3 className='text-xl font-bold text-gray-800 mb-2'>{name}</h3>
+        <h3 className='text-xl font-bold text-gray-800 mb-2'>{teamName}</h3>
         <div className='mt-auto'>
-          <p className='text-gray-600 text-sm'>Est. {year}</p>
+          <p className='text-gray-600 text-sm'>Batch: {batchYear}</p>
         </div>
       </div>
     </div>
@@ -65,105 +79,49 @@ const TeamCard = ({ logo, name, year, id }) => {
 
 const TeamsPage = () => {
   const [mounted, setMounted] = useState(false);
+  const [teams, setTeams] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Handle mounting for client-side animations
   useEffect(() => {
     setMounted(true);
+    const loadTeams = async () => {
+      try {
+        const response = await fetchTeams();
+        if (response.success) {
+          setTeams(response.data);
+        } else {
+          throw new Error(response.message || 'Failed to load teams');
+        }
+      } catch (err) {
+        setError(err.message);
+        console.error('Error loading teams:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadTeams();
   }, []);
 
-  // Mock team data - replace with actual data fetching in production
-  const teams = [
-    {
-      id: 1,
-      name: 'ELITE FC',
-      year: '2018',
-      logo: '/assets/logos/20241024_011337.jpg',
-    },
-    {
-      id: 2,
-      name: 'SPARK RISERS FC',
-      year: '2019',
-      logo: '/assets/logos/1733270150179.jpg',
-    },
-    {
-      id: 3,
-      name: 'IGNESIOUS',
-      year: '2022',
-      logo: '/assets/logos/FB_IMG_1733330088970.jpg',
-    },
-    {
-      id: 4,
-      name: 'SLYTHRIN',
-      year: '2021',
-      logo: '/assets/logos/images.png',
-    },
-    {
-      id: 5,
-      name: 'FC SCORPIONS',
-      year: '2019',
-      logo: '/assets/logos/IMG_3688.PNG',
-    },
-    {
-      id: 6,
-      name: 'DIABLOS FC',
-      year: '2019',
-      logo: '/assets/logos/IMG_3689.PNG',
-    },
-    {
-      id: 7,
-      name: 'WIZARDS FC',
-      year: '2019',
-      logo: '/assets/logos/IMG_3690.PNG',
-    },
-    {
-      id: 8,
-      name: 'IGNESIOUS',
-      year: '2023',
-      logo: '/assets/logos/IMG_3691.PNG',
-    },
-    {
-      id: 9,
-      name: 'DE METEORS',
-      year: '2020',
-      logo: '/assets/logos/IMG_3692.PNG',
-    },
-    {
-      id: 10,
-      name: 'BLUSTERY RISERS',
-      year: '2018',
-      logo: '/assets/logos/IMG_3693.PNG',
-    },
-    {
-      id: 11,
-      name: 'SPARK RISERS FC',
-      year: '2019',
-      logo: '/assets/logos/IMG_3694.PNG',
-    },
-    {
-      id: 12,
-      name: 'OLD SCHOOL FC',
-      year: '2009',
-      logo: '/assets/logos/IMG_5663.JPG',
-    },
-    {
-      id: 13,
-      name: 'LEIGESTER FC',
-      year: '2017',
-      logo: '/assets/logos/IMG_20241030_083706.jpg',
-    },
-    {
-      id: 14,
-      name: 'GLADIOLUS FC',
-      year: '2018',
-      logo: '/assets/logos/received_1438075889675861.jpeg.jpg',
-    },
-    {
-      id: 15,
-      name: 'SEQUESTERS FC',
-      year: '2022',
-      logo: '/assets/logos/WhatsApp Image 2024-12-04 at 23.39.31_3a911c20.jpg',
-    },
-  ];
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-red-500 text-center">
+          <p className="text-xl font-semibold">Error loading teams</p>
+          <p className="text-sm mt-2">{error}</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className='min-h-screen bg-gray-50'>
@@ -203,23 +161,21 @@ const TeamsPage = () => {
         <div className='grid grid-cols-1 xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 justify-items-center'>
           {teams.map((team, index) => (
             <div
-              key={team.id}
+              key={team._id}
               style={{
                 opacity: mounted ? 1 : 0,
                 animation: mounted
-                  ? `fadeIn 0.5s ease-out ${
-                      index * 0.1
-                    }s forwards, float 3s ease-in-out ${
+                  ? `fadeIn 0.5s ease-out ${index * 0.1}s forwards, float 3s ease-in-out ${
                       index * 0.1 + 0.5
                     }s infinite`
                   : 'none',
               }}
             >
               <TeamCard
-                id={team.id}
-                logo={team.logo}
-                name={team.name}
-                year={team.year}
+                _id={team._id}
+                teamLogo={team.teamLogo}
+                teamName={team.teamName}
+                batchYear={team.batchYear}
               />
             </div>
           ))}
