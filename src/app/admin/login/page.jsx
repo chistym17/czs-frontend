@@ -28,7 +28,13 @@ export default function AdminLogin() {
 
 
       if (data.success) {
+        console.log("Login successful");
+        console.log("Redirecting to dashboard");
+
         router.push("/admin/dashboard");
+
+        console.log("did not redirect");
+        
       } else {
         setError(data.message || "Login failed");
       }
