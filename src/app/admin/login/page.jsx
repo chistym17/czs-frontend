@@ -1,54 +1,3 @@
-// "use client";
-
-// import { ADMIN_EMAIL, ADMIN_PASS, ADMIN_TOKEN } from "@/constants/admin";
-// import { useRouter } from "next/navigation";
-// import { useState } from "react";
-
-// export default function AdminLogin() {
-//   const [email, setEmail] = useState("");
-//   const [pass, setPass] = useState("");
-//   const [error, setError] = useState("");
-//   const router = useRouter();
-
-//   const handleLogin = () => {
-//     if (email === ADMIN_EMAIL && pass === ADMIN_PASS) {
-//       // Set cookie manually
-//       document.cookie = `admin-auth=${ADMIN_TOKEN}; path=/;`;
-
-//       router.push("/admin/upload-fixture");
-//     } else {
-//       setError("Invalid credentials");
-//     }
-//   };
-
-//   return (
-//     <div className="p-8 max-w-sm mx-auto">
-//       <h1 className="text-xl font-bold mb-4">Admin Login</h1>
-//       <input
-//         type="email"
-//         className="block w-full mb-2 p-2 border"
-//         placeholder="Email"
-//         value={email}
-//         onChange={(e) => setEmail(e.target.value)}
-//       />
-//       <input
-//         type="password"
-//         className="block w-full mb-2 p-2 border"
-//         placeholder="Password"
-//         value={pass}
-//         onChange={(e) => setPass(e.target.value)}
-//       />
-//       <button
-//         onClick={handleLogin}
-//         className="bg-blue-600 text-white px-4 py-2 w-full rounded"
-//       >
-//         Login
-//       </button>
-//       {error && <p className="text-red-500 mt-2">{error}</p>}
-//     </div>
-//   );
-// }
-
 "use client";
 
 import { Eye, EyeOff, Lock, Mail, ShieldCheck } from "lucide-react";
@@ -63,28 +12,35 @@ export default function AdminLogin() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     setLoading(true);
     setError("");
 
-    setTimeout(() => {
-      if (
-        email === process.env.NEXT_PUBLIC_ADMIN_EMAIL &&
-        pass === process.env.NEXT_PUBLIC_ADMIN_PASS
-      ) {
-        document.cookie = `admin-auth=${process.env.NEXT_PUBLIC_ADMIN_TOKEN}; path=/;`;
+    try {
+      const res = await fetch("http://localhost:5000/admin/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({ email, pass }),
+      });
+
+      if (res.ok) {
         router.push("/admin/dashboard");
       } else {
-        setError("Invalid email or password. Please try again.");
+        const data = await res.json();
+        setError(data.message || "Login failed");
       }
+    } catch {
+      setError("Something went wrong. Try again.");
+    } finally {
       setLoading(false);
-    }, 800);
+    }
   };
 
   const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
-      handleLogin();
-    }
+    if (e.key === "Enter") handleLogin();
   };
 
   return (
@@ -122,7 +78,7 @@ export default function AdminLogin() {
                   id="email"
                   type="email"
                   placeholder="admin@example.com"
-                  className="w-full pl-10 pr-4 py-2 border border-blue-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
+                  className="w-full pl-10 pr-4 py-2 border border-blue-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400 bg-white text-black"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   onKeyDown={handleKeyDown}
@@ -143,7 +99,7 @@ export default function AdminLogin() {
                   id="password"
                   type={showPassword ? "text" : "password"}
                   placeholder="••••••••"
-                  className="w-full pl-10 pr-10 py-2 border border-blue-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
+                  className="w-full pl-10 pr-10 py-2 border border-blue-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400 bg-white text-black"
                   value={pass}
                   onChange={(e) => setPass(e.target.value)}
                   onKeyDown={handleKeyDown}
