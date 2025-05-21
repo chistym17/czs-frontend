@@ -24,13 +24,12 @@ export default function AdminLogin() {
         },
         body: JSON.stringify({ email, pass }),
       });
+      const data = await res.json();
 
-      console.log(res);
 
-      if (res.ok) {
+      if (data.success) {
         router.push("/admin/dashboard");
       } else {
-        const data = await res.json();
         setError(data.message || "Login failed");
       }
     } catch {
