@@ -6,14 +6,85 @@ import {
   LogOut,
   Menu,
   ShieldCheck,
+  Trash,
   UploadCloud,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function AdminDashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [teams, setTeams] = useState([]);
+  const [players, setPlayers] = useState([]);
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [teamsRes, playersRes] = await Promise.all([
+          fetch("http://localhost:5000/team", { credentials: "include" }),
+          fetch("http://localhost:5000/player/players", {
+            credentials: "include",
+          }),
+        ]);
+
+        const teamsData = await teamsRes.json();
+        const playersData = await playersRes.json();
+
+        if (teamsData.success && playersData.success) {
+          setTeams(teamsData.data);
+          setPlayers(playersData.players);
+        }
+      } catch (error) {
+        console.error("Error loading dashboard:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      await fetch("http://localhost:5000/admin/logout", {
+        method: "POST",
+        credentials: "include",
+      });
+      router.push("/");
+    } catch (err) {
+      console.error("Logout failed", err);
+    }
+  };
+
+  const deleteTeam = async (id) => {
+    if (!confirm("Are you sure you want to delete this team?")) return;
+    try {
+      await fetch(`http://localhost:5000/team/${id}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+      setTeams((prev) => prev.filter((t) => t._id !== id));
+    } catch (err) {
+      alert("Failed to delete team.");
+    }
+  };
+
+  const deletePlayer = async (id) => {
+    if (!confirm("Are you sure you want to delete this player?")) return;
+    try {
+      await fetch(`http://localhost:5000/player/${id}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+      setPlayers((prev) => prev.filter((p) => p._id !== id));
+    } catch (err) {
+      alert("Failed to delete player.");
+    }
+  };
+
+  if (loading) return <div className="p-8">Loading dashboard...</div>;
 
   return (
     <div className="min-h-screen bg-white text-blue-800">
@@ -63,7 +134,7 @@ export default function AdminDashboard() {
             Upload Results
           </button>
           <button
-            onClick={() => alert("Logging out...")}
+            onClick={handleLogout}
             className="flex items-center gap-3 w-full text-left px-4 py-2 rounded-lg text-red-600 hover:bg-red-100 hover:text-red-800"
           >
             <LogOut className="h-5 w-5" />
@@ -110,6 +181,52 @@ export default function AdminDashboard() {
             >
               Go to Upload Results
             </button>
+          </div>
+        </section>
+
+        <section className="mt-10">
+          <h2 className="text-2xl font-semibold mb-3">Registered Teams</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {teams.map((team) => (
+              <div key={team._id} className="border p-4 rounded-lg shadow">
+                <h3 className="font-bold text-xl">{team.teamName}</h3>
+                <p>Batch: {team.batchYear}</p>
+                <p>Captain: {team.captainName}</p>
+                <p>Vice Captain: {team.viceCaptainName}</p>
+                <button
+                  onClick={() => deleteTeam(team._id)}
+                  className="mt-3 text-red-600 hover:text-red-800 flex items-center gap-1"
+                >
+                  <Trash className="h-4 w-4" /> Delete Team
+                </button>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="mt-10">
+          <h2 className="text-2xl font-semibold mb-3">Registered Players</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {players.map((player) => (
+              <div key={player._id} className="border p-4 rounded-lg shadow">
+                <h3 className="font-bold text-xl">{player.name}</h3>
+                <p>Batch: {player.batch}</p>
+                <p>Position: {player.position}</p>
+                {player.image && (
+                  <img
+                    src={player.image}
+                    alt="player"
+                    className="w-20 h-20 object-cover rounded-full mt-2"
+                  />
+                )}
+                <button
+                  onClick={() => deletePlayer(player._id)}
+                  className="mt-3 text-red-600 hover:text-red-800 flex items-center gap-1"
+                >
+                  <Trash className="h-4 w-4" /> Delete Player
+                </button>
+              </div>
+            ))}
           </div>
         </section>
 
