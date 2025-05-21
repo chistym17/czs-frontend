@@ -370,7 +370,7 @@ export default function TeamDetailsClient({ teamId }) {
                   min="0"
                   value={goalsToAdd}
                   onChange={(e) => setGoalsToAdd(e.target.value)}
-                  className="w-full px-4 py-3 text-lg border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-4 py-3 text-lg border border-gray-300 rounded-lg bg-white text-black focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   placeholder="Enter number of goals"
                 />
               </div>

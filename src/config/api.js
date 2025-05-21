@@ -7,7 +7,7 @@ export const API_ENDPOINTS = {
 
 export const fetchTeams = async () => {
   try {
-    const response = await fetch(API_ENDPOINTS.teams);
+    const response = await fetch(`${API_ENDPOINTS.teams}?isVerified=true`);
     if (!response.ok) throw new Error('Failed to fetch teams');
     const data = await response.json();
     console.log(data);

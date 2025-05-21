@@ -27,26 +27,27 @@ export default function AdminDashboard() {
   const [showTeamDetails, setShowTeamDetails] = useState(false);
   const router = useRouter();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [teamsRes, playersRes] = await Promise.all([
-          fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/teams`),
-        ]);
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const [teamsRes] = await Promise.all([
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/teams`),
+      ]);
 
-        const teamsData = await teamsRes.json();
+      const teamsData = await teamsRes.json();
 
-        if (teamsData.success) {
-          setTeams(teamsData.data);
-        }
-      } catch (error) {
-        console.error("Error loading dashboard:", error);
-        toast.error('Failed to fetch teams');
-      } finally {
-        setLoading(false);
+      if (teamsData.success) {
+        setTeams(teamsData.data);
       }
-    };
+    } catch (error) {
+      console.error("Error loading dashboard:", error);
+      toast.error('Failed to fetch teams');
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchData();
   }, []);
 
@@ -119,7 +120,7 @@ export default function AdminDashboard() {
 
   const handleToggleVerification = async (teamId, currentStatus) => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/teams/${teamId}/verify`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_ADMIN_URL}/api/teams/${teamId}/verify`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -130,10 +131,7 @@ export default function AdminDashboard() {
       const data = await response.json();
       if (data.success) {
         toast.success(`Team ${!currentStatus ? 'verified' : 'unverified'} successfully`);
-        fetchTeams();
-        if (selectedTeam?._id === teamId) {
-          setSelectedTeam(prev => ({ ...prev, isVerified: !currentStatus }));
-        }
+        await fetchData();
       } else {
         throw new Error(data.message || 'Failed to update team verification status');
       }
@@ -147,6 +145,7 @@ export default function AdminDashboard() {
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_ADMIN_URL}/api/team/${teamId}`, {
         method: 'DELETE',
+        credentials: 'include',
       });
 
       const data = await response.json();
@@ -154,6 +153,7 @@ export default function AdminDashboard() {
         toast.success('Team deleted successfully');
         setShowDeleteConfirm(false);
         setTeamToDelete(null);
+        await fetchData();
         if (selectedTeam?._id === teamId) {
           setSelectedTeam(null);
         }
@@ -170,11 +170,13 @@ export default function AdminDashboard() {
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_ADMIN_URL}/api/teams/${teamId}/players/${playerId}`, {
         method: 'DELETE',
+        credentials: 'include',
       });
 
       const data = await response.json();
       if (data.success) {
         toast.success('Player deleted successfully');
+        await fetchData();
         if (selectedTeam?._id === teamId) {
           setSelectedTeam(prev => ({
             ...prev,
