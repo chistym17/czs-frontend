@@ -12,28 +12,35 @@ export default function AdminLogin() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     setLoading(true);
     setError("");
 
-    setTimeout(() => {
-      if (
-        email === process.env.NEXT_PUBLIC_ADMIN_EMAIL &&
-        pass === process.env.NEXT_PUBLIC_ADMIN_PASS
-      ) {
-        document.cookie = `admin-auth=${process.env.NEXT_PUBLIC_ADMIN_TOKEN}; path=/;`;
+    try {
+      const res = await fetch("http://localhost:5000/admin/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({ email, pass }),
+      });
+
+      if (res.ok) {
         router.push("/admin/dashboard");
       } else {
-        setError("Invalid email or password. Please try again.");
+        const data = await res.json();
+        setError(data.message || "Login failed");
       }
+    } catch {
+      setError("Something went wrong. Try again.");
+    } finally {
       setLoading(false);
-    }, 800);
+    }
   };
 
   const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
-      handleLogin();
-    }
+    if (e.key === "Enter") handleLogin();
   };
 
   return (

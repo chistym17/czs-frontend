@@ -32,7 +32,7 @@ export default function PublicFixtures() {
       <div className="container mx-auto px-4 py-12 max-w-6xl">
         <header className="mb-12 text-center">
           <h1 className="text-3xl md:text-4xl font-bold text-blue-800 mb-4">
-            Upcoming Fixture
+            Upcoming Fixtures
           </h1>
           <div className="h-1 w-24 bg-blue-600 mx-auto rounded-full"></div>
         </header>
