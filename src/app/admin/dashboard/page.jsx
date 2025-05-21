@@ -63,15 +63,27 @@ export default function AdminDashboard() {
   };
 
   const deleteTeam = async (id) => {
-    if (!confirm("Are you sure you want to delete this team?")) return;
+    if (!window.confirm("Are you sure you want to delete this team? This action cannot be undone.")) {
+      return;
+    }
+
     try {
-      await fetch(`${process.env.NEXT_PUBLIC_ADMIN_URL}/team/${id}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_ADMIN_URL}/api/team/${id}`, {
         method: "DELETE",
         credentials: "include",
       });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to delete team');
+      }
+
+      toast.success('Team deleted successfully');
       setTeams((prev) => prev.filter((t) => t._id !== id));
-    } catch (err) {
-      alert("Failed to delete team.");
+    } catch (error) {
+      console.error('Error deleting team:', error);
+      toast.error(error.message || 'Failed to delete team');
     }
   };
 
@@ -133,7 +145,7 @@ export default function AdminDashboard() {
 
   const handleDeleteTeam = async (teamId) => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/teams/${teamId}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_ADMIN_URL}/api/team/${teamId}`, {
         method: 'DELETE',
       });
 
@@ -142,7 +154,6 @@ export default function AdminDashboard() {
         toast.success('Team deleted successfully');
         setShowDeleteConfirm(false);
         setTeamToDelete(null);
-        fetchTeams();
         if (selectedTeam?._id === teamId) {
           setSelectedTeam(null);
         }
@@ -157,7 +168,7 @@ export default function AdminDashboard() {
 
   const handleDeletePlayer = async (teamId, playerId) => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/teams/${teamId}/players/${playerId}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_ADMIN_URL}/api/teams/${teamId}/players/${playerId}`, {
         method: 'DELETE',
       });
 
@@ -372,31 +383,6 @@ export default function AdminDashboard() {
           </div>
         </section>
 
-        <section className="mt-10">
-          <h2 className="text-2xl font-semibold mb-3">Registered Players</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {players.map((player) => (
-              <div key={player._id} className="border p-4 rounded-lg shadow">
-                <h3 className="font-bold text-xl">{player.name}</h3>
-                <p>Batch: {player.batch}</p>
-                <p>Position: {player.position}</p>
-                {player.image && (
-                  <img
-                    src={player.image}
-                    alt="player"
-                    className="w-20 h-20 object-cover rounded-full mt-2"
-                  />
-                )}
-                <button
-                  onClick={() => deletePlayer(player._id)}
-                  className="mt-3 text-red-600 hover:text-red-800 flex items-center gap-1"
-                >
-                  <Trash className="h-4 w-4" /> Delete Player
-                </button>
-              </div>
-            ))}
-          </div>
-        </section>
 
         <footer className="mt-12 text-center text-sm text-blue-400">
           © {new Date().getFullYear()} Tournament Admin. All rights reserved.

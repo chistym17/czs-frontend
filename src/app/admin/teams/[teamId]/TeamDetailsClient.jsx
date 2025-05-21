@@ -39,11 +39,12 @@ export default function TeamDetailsClient({ teamId }) {
 
   const handleToggleVerification = async () => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/teams/${teamId}/verify`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_ADMIN_URL}/api/teams/${teamId}/verify`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include',
         body: JSON.stringify({ isVerified: !team.isVerified })
       });
 
@@ -65,8 +66,10 @@ export default function TeamDetailsClient({ teamId }) {
     
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/teams/${teamId}/players/${playerToDelete._id}`,
-        { method: 'DELETE' }
+        `${process.env.NEXT_PUBLIC_ADMIN_URL}/api/teams/${teamId}/players/${playerToDelete._id}`,
+        { 
+          method: 'DELETE',
+        }
       );
 
       const data = await response.json();
@@ -95,7 +98,7 @@ export default function TeamDetailsClient({ teamId }) {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/teams/${teamId}/players/${selectedPlayer._id}/goals`,
+        `${process.env.NEXT_PUBLIC_ADMIN_URL}/api/teams/${teamId}/players/${selectedPlayer._id}/goals`,
         {
           method: 'POST',
           headers: {
