@@ -22,9 +22,10 @@ export default function AdminLogin() {
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: "include",
         body: JSON.stringify({ email, pass }),
       });
+
+      console.log(res);
 
       if (res.ok) {
         router.push("/admin/dashboard");
