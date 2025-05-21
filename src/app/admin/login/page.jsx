@@ -17,7 +17,7 @@ export default function AdminLogin() {
     setError("");
 
     try {
-      const res = await fetch("http://localhost:5000/admin/login", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_ADMIN_URL}/admin/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
