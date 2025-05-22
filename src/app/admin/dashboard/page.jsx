@@ -77,7 +77,6 @@ export default function AdminDashboard() {
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_ADMIN_URL}/api/team/${id}`, {
         method: "DELETE",
-        credentials: "include",
       });
 
       const data = await response.json();
@@ -99,7 +98,6 @@ export default function AdminDashboard() {
     try {
       await fetch(`${process.env.NEXT_PUBLIC_API_URL}/player/${id}`, {
         method: "DELETE",
-        credentials: "include",
       });
       setPlayers((prev) => prev.filter((p) => p._id !== id));
     } catch (err) {
@@ -151,7 +149,6 @@ export default function AdminDashboard() {
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_ADMIN_URL}/api/team/${teamId}`, {
         method: 'DELETE',
-        credentials: 'include',
       });
 
       const data = await response.json();
@@ -176,7 +173,6 @@ export default function AdminDashboard() {
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_ADMIN_URL}/api/teams/${teamId}/players/${playerId}`, {
         method: 'DELETE',
-        credentials: 'include',
       });
 
       const data = await response.json();
