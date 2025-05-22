@@ -11,25 +11,29 @@ export default function AdminLogin() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const handleLogin = async () => {
     setLoading(true);
     setError("");
 
     try {
-      const res = await fetch("http://localhost:5000/admin/login", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_ADMIN_URL}/admin/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: "include",
         body: JSON.stringify({ email, pass }),
       });
+      const data = await res.json();
 
-      if (res.ok) {
+
+      if (data.success) {
+        localStorage.setItem("isAdmin", "true");
         router.push("/admin/dashboard");
+        console.log("did not redirect");
+        
       } else {
-        const data = await res.json();
         setError(data.message || "Login failed");
       }
     } catch {

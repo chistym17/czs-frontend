@@ -13,9 +13,12 @@ export default function PublicFixtures() {
   const fetchFixtures = async () => {
     try {
       setLoading(true);
-      const res = await axios.get("http://localhost:5001/list-fixtures", {
-        headers: { Authorization: "Bearer admin123" }, // remove if you want public access without token
-      });
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_ADMIN_URL}/list-fixtures`,
+        {
+          headers: { Authorization: `Bearer ${process.env.NEXT_PUBLIC_ADMIN_TOKEN}` },
+        }
+      );
       setFixtures(res.data);
     } catch (err) {
       console.error("Error loading fixtures:", err);

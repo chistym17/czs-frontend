@@ -55,6 +55,7 @@ const TeamRegistration = () => {
                 </p>
               </div>
             </Link>
+
           </div>
 
           {/* Registration Call-to-Action */}
@@ -88,9 +89,10 @@ const TeamRegistration = () => {
           </div>
 
           {/* Timeline or Deadline */}
-          <div className="mt-12 text-gray-600">
-            <p className="text-sm font-semibold">
-              Registration Deadline: Not Started.
+
+          <div className='mt-12 text-gray-600'>
+            <p className='text-sm font-semibold'>
+              Registration has started.
             </p>
           </div>
         </div>

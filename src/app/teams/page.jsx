@@ -4,6 +4,8 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Footer from '../../components/Footer';
 import Navbar from '../../components/Navbar';
+import { fetchTeams } from '../../config/api';
+import Link from 'next/link';
 
 // Additional styles to make it more responsive for smaller screens
 const mediaStyles = `
@@ -26,147 +28,139 @@ const mediaStyles = `
   }
 `;
 
-const TeamCard = ({ logo, name, year, id }) => {
+const TeamCard = ({ teamLogo, teamName, batchYear, _id }) => {
   const router = useRouter();
+  const [imgError, setImgError] = useState(false);
 
   const handleClick = () => {
-    router.push(`/team-details`); //router.push(`/teams/${id}`);
+    router.push(`/teams/${_id}`);
   };
+
+  const shouldShowImage = teamLogo && teamLogo.trim() !== '';
 
   return (
     <div
       onClick={handleClick}
-      className='team-card bg-white rounded-lg overflow-hidden cursor-pointer border border-blue-300 shadow-md 
-      transition-all duration-300 hover:scale-105 hover:shadow-xl hover:border-blue-500 
-      w-64 h-96 flex flex-col transform-gpu'
+      className="group bg-white rounded-xl overflow-hidden cursor-pointer border border-gray-200 
+      shadow-sm hover:shadow-lg transition-all duration-300 hover:border-blue-300 
+      w-80 h-[420px] flex flex-col transform-gpu"
     >
-      <div
-        className='h-48 w-full relative bg-gray-50 flex items-center justify-center p-4 
-      transition-all duration-300 hover:bg-blue-50'
-      >
-        <Image
-          src={logo}
-          alt={`${name} logo`}
-          width={160}
-          height={160}
-          objectFit='contain'
-          className='max-h-40 transition-transform duration-300 hover:scale-110'
-        />
+      {/* Logo as cover image - increased height */}
+      <div className="relative h-64 w-full overflow-hidden">
+        {shouldShowImage && !imgError ? (
+          <Image
+            src={teamLogo}
+            alt={`${teamName} logo`}
+            fill
+            className="object-cover transition-transform duration-300 group-hover:scale-105"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            priority
+            onError={() => setImgError(true)}
+          />
+        ) : (
+          <div className="w-full h-full bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center">
+            <span className="text-6xl font-bold text-blue-200">
+              {teamName.charAt(0)}
+            </span>
+          </div>
+        )}
+        {/* Overlay gradient for better text visibility */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-black/0" />
       </div>
-      <div className='p-4 flex-1 flex flex-col justify-between border-t border-blue-100'>
-        <h3 className='text-xl font-bold text-gray-800 mb-2'>{name}</h3>
-        <div className='mt-auto'>
-          <p className='text-gray-600 text-sm'>Est. {year}</p>
+
+      {/* Team info section - adjusted padding */}
+      <div className="p-6 flex-1 flex flex-col justify-between bg-white">
+        <div>
+          <h3 className="text-2xl font-bold text-gray-800 mb-3 group-hover:text-blue-600 transition-colors line-clamp-1">
+            {teamName}
+          </h3>
+          <div className="flex items-center space-x-2">
+            <span className="px-3 py-1.5 bg-blue-50 text-blue-700 text-sm font-semibold rounded-full border border-blue-100">
+              Batch {batchYear}
+            </span>
+          </div>
+        </div>
+
+        {/* View details button - increased spacing */}
+        <div className="mt-6 flex justify-end">
+          <span className="text-sm text-blue-600 font-medium group-hover:text-blue-700 transition-colors">
+            View Details →
+          </span>
         </div>
       </div>
     </div>
   );
 };
 
-const TeamsPage = () => {
-  const [mounted, setMounted] = useState(false);
+const EmptyState = () => (
+  <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
+    <div className="w-24 h-24 bg-blue-50 rounded-full flex items-center justify-center mb-6">
+      <svg className="w-12 h-12 text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+      </svg>
+    </div>
+    <h2 className="text-2xl font-bold text-gray-800 mb-2">No Teams Registered Yet</h2>
+    <p className="text-gray-600 mb-6 max-w-md">
+      Be the first to register your team for the 2025 season. Join the competition and showcase your talent!
+    </p>
 
-  // Handle mounting for client-side animations
+    <Link href="/team-registration">
+      <button className="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors">
+        Register Your Team
+      </button>
+    </Link>
+  </div>
+);
+
+const TeamsPage = () => {
+  const router = useRouter();
+  const [mounted, setMounted] = useState(false);
+  const [teams, setTeams] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   useEffect(() => {
     setMounted(true);
+    const loadTeams = async () => {
+      try {
+        const response = await fetchTeams();
+        if (response.success) {
+          setTeams(response.data);
+        } else {
+          throw new Error(response.message || 'Failed to load teams');
+        }
+      } catch (err) {
+        setError(err.message);
+        console.error('Error loading teams:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadTeams();
   }, []);
 
-  // Mock team data - replace with actual data fetching in production
-  const teams = [
-    {
-      id: 1,
-      name: 'ELITE FC',
-      year: '2018',
-      logo: '/assets/logos/20241024_011337.jpg',
-    },
-    {
-      id: 2,
-      name: 'SPARK RISERS FC',
-      year: '2019',
-      logo: '/assets/logos/1733270150179.jpg',
-    },
-    {
-      id: 3,
-      name: 'IGNESIOUS',
-      year: '2022',
-      logo: '/assets/logos/FB_IMG_1733330088970.jpg',
-    },
-    {
-      id: 4,
-      name: 'SLYTHRIN',
-      year: '2021',
-      logo: '/assets/logos/images.png',
-    },
-    {
-      id: 5,
-      name: 'FC SCORPIONS',
-      year: '2019',
-      logo: '/assets/logos/IMG_3688.PNG',
-    },
-    {
-      id: 6,
-      name: 'DIABLOS FC',
-      year: '2019',
-      logo: '/assets/logos/IMG_3689.PNG',
-    },
-    {
-      id: 7,
-      name: 'WIZARDS FC',
-      year: '2019',
-      logo: '/assets/logos/IMG_3690.PNG',
-    },
-    {
-      id: 8,
-      name: 'IGNESIOUS',
-      year: '2023',
-      logo: '/assets/logos/IMG_3691.PNG',
-    },
-    {
-      id: 9,
-      name: 'DE METEORS',
-      year: '2020',
-      logo: '/assets/logos/IMG_3692.PNG',
-    },
-    {
-      id: 10,
-      name: 'BLUSTERY RISERS',
-      year: '2018',
-      logo: '/assets/logos/IMG_3693.PNG',
-    },
-    {
-      id: 11,
-      name: 'SPARK RISERS FC',
-      year: '2019',
-      logo: '/assets/logos/IMG_3694.PNG',
-    },
-    {
-      id: 12,
-      name: 'OLD SCHOOL FC',
-      year: '2009',
-      logo: '/assets/logos/IMG_5663.JPG',
-    },
-    {
-      id: 13,
-      name: 'LEIGESTER FC',
-      year: '2017',
-      logo: '/assets/logos/IMG_20241030_083706.jpg',
-    },
-    {
-      id: 14,
-      name: 'GLADIOLUS FC',
-      year: '2018',
-      logo: '/assets/logos/received_1438075889675861.jpeg.jpg',
-    },
-    {
-      id: 15,
-      name: 'SEQUESTERS FC',
-      year: '2022',
-      logo: '/assets/logos/WhatsApp Image 2024-12-04 at 23.39.31_3a911c20.jpg',
-    },
-  ];
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-red-500 text-center">
+          <p className="text-xl font-semibold">Error loading teams</p>
+          <p className="text-sm mt-2">{error}</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className='min-h-screen bg-gray-50'>
+    <div className="min-h-screen bg-gray-50">
       <style jsx global>{`
         @keyframes fadeIn {
           0% {
@@ -178,55 +172,48 @@ const TeamsPage = () => {
             transform: translateY(0);
           }
         }
-        @keyframes float {
-          0% {
-            transform: translateY(0px);
-          }
-          50% {
-            transform: translateY(-5px);
-          }
-          100% {
-            transform: translateY(0px);
-          }
-        }
-
-        ${mediaStyles}
       `}</style>
 
       <Navbar />
 
-      <main className='container mx-auto px-2 sm:px-4 py-6 sm:py-10'>
-        <h1 className='text-2xl sm:text-3xl font-bold text-center mb-6 sm:mb-10 text-sky-600'>
-          SUPER CUP TEAMS
-        </h1>
-
-        <div className='grid grid-cols-1 xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 justify-items-center'>
-          {teams.map((team, index) => (
-            <div
-              key={team.id}
-              style={{
-                opacity: mounted ? 1 : 0,
-                animation: mounted
-                  ? `fadeIn 0.5s ease-out ${
-                      index * 0.1
-                    }s forwards, float 3s ease-in-out ${
-                      index * 0.1 + 0.5
-                    }s infinite`
-                  : 'none',
-              }}
-            >
-              <TeamCard
-                id={team.id}
-                logo={team.logo}
-                name={team.name}
-                year={team.year}
-              />
+      <main className="container mx-auto px-4 py-8">
+        {teams.length === 0 ? (
+          <EmptyState />
+        ) : (
+          <>
+            <div className="text-center mb-8">
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                Registered Teams for 2025 Season
+              </h1>
+              <p className="text-gray-600">
+                {teams.length} {teams.length === 1 ? 'team has' : 'teams have'} registered so far
+              </p>
             </div>
-          ))}
-        </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 justify-items-center">
+              {teams.map((team, index) => (
+                <div
+                  key={team._id}
+                  style={{
+                    opacity: mounted ? 1 : 0,
+                    animation: mounted
+                      ? `fadeIn 0.5s ease-out ${index * 0.1}s forwards`
+                      : 'none',
+                  }}
+                >
+                  <TeamCard
+                    _id={team._id}
+                    teamLogo={team.teamLogo}
+                    teamName={team.teamName}
+                    batchYear={team.batchYear}
+                  />
+                </div>
+              ))}
+            </div>
+          </>
+        )}
       </main>
 
-      <Footer />
     </div>
   );
 };

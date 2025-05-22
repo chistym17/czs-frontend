@@ -18,9 +18,12 @@ export default function UploadResult() {
 
   const fetchResults = async () => {
     try {
-      const res = await axios.get("http://localhost:5001/list-results", {
-        headers: { Authorization: "Bearer admin123" },
-      });
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_ADMIN_URL}/list-results`,
+        {
+          headers: { Authorization: `Bearer ${process.env.NEXT_PUBLIC_ADMIN_TOKEN}` },
+        }
+      );
       setResults(res.data);
     } catch (err) {
       console.error("Fetch error:", err);
@@ -37,11 +40,11 @@ export default function UploadResult() {
     setError("");
     try {
       const res = await axios.post(
-        "http://localhost:5001/upload-result",
+        `${process.env.NEXT_PUBLIC_ADMIN_URL}/upload-result`,
         formData,
         {
           headers: {
-            Authorization: "Bearer admin123",
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_ADMIN_TOKEN}`,
           },
         }
       );
@@ -309,9 +312,11 @@ export default function UploadResult() {
                     onClick={async () => {
                       try {
                         await axios.delete(
-                          `http://localhost:5001/delete-result/${res._id}`,
+                          `${process.env.NEXT_PUBLIC_ADMIN_URL}/delete-result/${res._id}`,
                           {
-                            headers: { Authorization: "Bearer admin123" },
+                            headers: {
+                              Authorization: `Bearer ${process.env.NEXT_PUBLIC_ADMIN_TOKEN}`,
+                            },
                           }
                         );
                         fetchResults();

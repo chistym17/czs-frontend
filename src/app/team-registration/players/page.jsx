@@ -86,6 +86,7 @@ export default function PlayersRegistration() {
     // localStorage.removeItem('players');
     localStorage.removeItem('currentPlayer');
     localStorage.removeItem('teamData');
+    localStorage.removeItem('players');
     window.location.href = "/team-customization"
   };
 
