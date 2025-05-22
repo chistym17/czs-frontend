@@ -144,7 +144,7 @@ const Navbar = () => {
               ))}
             </ul>
 
-          
+
           </div>
 
           {/* Mobile menu button */}
@@ -263,6 +263,7 @@ const Navbar = () => {
           ))}
 
           {/* Admin Login in mobile menu */}
+
           <div className="border-t mt-2 pt-2">
             <Link href={"/admin/login"}>
               <div
@@ -286,7 +287,7 @@ const Navbar = () => {
                 Admin Login
               </div>
             </Link>
-          </div>
+          </div> */}
         </div>
       </div>
 
