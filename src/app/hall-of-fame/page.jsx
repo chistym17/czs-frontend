@@ -138,7 +138,7 @@ export default function TournamentHistory() {
         name: "Mahmud",
         Team: "Emperors Fc",
         goals: 5,
-        image: "/api/placeholder/240/300",
+        image: "/assets/hall-of-fame/Mahmud.jpg",
       },
       mvp: {
         name: "Tofayel",
