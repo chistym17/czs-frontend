@@ -65,7 +65,7 @@ const Navbar = () => {
         { name: "Team Customization", path: "/team-customization" }
       ],
     },
-    {name:"Contact Us", path:"/contact"}
+    { name: "Contact Us", path: "/contact" }
   ];
 
   return (
@@ -287,7 +287,7 @@ const Navbar = () => {
                 Admin Login
               </div>
             </Link>
-          </div> */}
+          </div>
         </div>
       </div>
 
