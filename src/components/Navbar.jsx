@@ -65,7 +65,7 @@ const Navbar = () => {
         { name: "Team Customization", path: "/team-customization" }
       ],
     },
-    { name: "Contact", path: "/contact" },
+    {name:"Contact Us", path:"/contact"}
   ];
 
   return (
@@ -144,26 +144,7 @@ const Navbar = () => {
               ))}
             </ul>
 
-            {/* Admin Login Button */}
-            <Link href={`/admin/login`}>
-              <button className="ml-6 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md transition duration-200 ease-in-out flex items-center">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4 mr-2"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zm-4 7a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                  />
-                </svg>
-                Admin Login
-              </button>
-            </Link>
+          
           </div>
 
           {/* Mobile menu button */}

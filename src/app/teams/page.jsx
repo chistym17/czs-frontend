@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Footer from '../../components/Footer';
 import Navbar from '../../components/Navbar';
 import { fetchTeams } from '../../config/api';
+import Link from 'next/link';
 
 // Additional styles to make it more responsive for smaller screens
 const mediaStyles = `
@@ -79,7 +80,7 @@ const TeamCard = ({ teamLogo, teamName, batchYear, _id }) => {
             </span>
           </div>
         </div>
-        
+
         {/* View details button - increased spacing */}
         <div className="mt-6 flex justify-end">
           <span className="text-sm text-blue-600 font-medium group-hover:text-blue-700 transition-colors">
@@ -102,12 +103,12 @@ const EmptyState = () => (
     <p className="text-gray-600 mb-6 max-w-md">
       Be the first to register your team for the 2025 season. Join the competition and showcase your talent!
     </p>
-    <button
-      onClick={() => router.push('/team-registration')}
-      className="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors"
-    >
-      Register Your Team
-    </button>
+
+    <Link href="/team-registration">
+      <button className="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors">
+        Register Your Team
+      </button>
+    </Link>
   </div>
 );
 

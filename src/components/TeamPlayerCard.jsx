@@ -3,7 +3,7 @@ import Image from 'next/image';
 
 const TeamPlayerCard = ({ player }) => {
   const shouldShowPlayerImage = player.image && player.image.trim() !== '';
-  const hasGoals = player.goals && player.goals > 0;
+  const hasGoals = player.goals > 0;
 
   return (
     <div className="relative group bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 w-72 h-[420px] overflow-hidden flex flex-col">

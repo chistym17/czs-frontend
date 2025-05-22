@@ -11,6 +11,7 @@ export default function AdminLogin() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const handleLogin = async () => {
     setLoading(true);
@@ -28,11 +29,8 @@ export default function AdminLogin() {
 
 
       if (data.success) {
-        console.log("Login successful");
-        console.log("Redirecting to dashboard");
-
+        localStorage.setItem("isAdmin", "true");
         router.push("/admin/dashboard");
-
         console.log("did not redirect");
         
       } else {

@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import { toast, Toaster } from 'react-hot-toast';
 import Image from 'next/image';
 import { FaTrash, FaCheck, FaTimes, FaEdit, FaUsers, FaChevronRight } from 'react-icons/fa';
+import Navbar from "@/components/Navbar";
 
 export default function AdminDashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -26,6 +27,8 @@ export default function AdminDashboard() {
   const [selectedTeamPlayers, setSelectedTeamPlayers] = useState([]);
   const [showTeamDetails, setShowTeamDetails] = useState(false);
   const router = useRouter();
+
+
 
   const fetchData = async () => {
     try {
@@ -48,15 +51,18 @@ export default function AdminDashboard() {
   };
 
   useEffect(() => {
-    fetchData();
+    const isAdmin = localStorage.getItem("isAdmin");
+    if (!isAdmin) {
+      router.push("/admin/login");
+    }
+    else{
+      fetchData();
+    }
   }, []);
 
   const handleLogout = async () => {
     try {
-      await fetch(`${process.env.NEXT_PUBLIC_ADMIN_URL}/logout`, {
-        method: "POST",
-        credentials: "include",
-      });
+      localStorage.removeItem("isAdmin");
       router.push("/");
     } catch (err) {
       console.error("Logout failed", err);
@@ -192,7 +198,14 @@ export default function AdminDashboard() {
     }
   };
 
-  if (loading) return <div className="p-8">Loading dashboard...</div>;
+  if (loading) return (
+    <div className="min-h-screen bg-gray-50">
+      <Navbar />
+      <div className="flex items-center justify-center h-[calc(100vh-64px)]">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    </div>
+  );
 
   return (
     <div className="min-h-screen bg-gray-50">

@@ -41,7 +41,7 @@ const TeamRegistration = () => {
               </div>
               <h3 className='text-xl font-semibold mb-2'>Team Requirements</h3>
               <p className='text-gray-600'>
-                Register your squad of 15-20 players
+                Register your squad of 16 players
               </p>
             </div>
           </div>
@@ -79,7 +79,7 @@ const TeamRegistration = () => {
           {/* Timeline or Deadline */}
           <div className='mt-12 text-gray-600'>
             <p className='text-sm font-semibold'>
-              Registration Deadline: Not Started.
+              Registration has started.
             </p>
           </div>
         </div>
