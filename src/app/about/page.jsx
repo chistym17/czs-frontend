@@ -71,24 +71,22 @@ const page = () => {
             Meet the Team
           </h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-10">
-            {["Raiyan Chowdhury", "Tariq Hasan", "Iftekhar Ahmed"].map(
-              (member, index) => (
-                <div
-                  key={index}
-                  className="bg-white shadow-lg rounded-lg p-6 text-center"
-                >
-                  <img
-                    src={`https://via.placeholder.com/150?text=${
-                      member.split(" ")[0]
-                    }`}
-                    alt={member}
-                    className="rounded-full mb-4 border-4 border-blue-500 mx-auto"
-                  />
-                  <h3 className="text-xl font-bold">{member}</h3>
-                  <p className="text-gray-600">Organizer</p>
-                </div>
-              )
-            )}
+            {["Titash", "Jafir", "Ebad", "Riyad"].map((member, index) => (
+              <div
+                key={index}
+                className="bg-white shadow-lg rounded-lg p-6 text-center"
+              >
+                <img
+                  src={`/assets/admin/${member
+                    .replace(/\s+/g, "_")
+                    .toLowerCase()}.jpg`}
+                  alt={member}
+                  className="rounded-full mb-4 border-4 border-blue-500 mx-auto"
+                />
+                <h3 className="text-xl font-bold">{member}</h3>
+                <p className="text-gray-600">Committee Head</p>
+              </div>
+            ))}
           </div>
         </section>
 

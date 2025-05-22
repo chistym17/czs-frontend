@@ -1,5 +1,6 @@
 "use client";
 
+import Navbar from "@/components/Navbar";
 // pages/team-requirements.jsx
 
 import {
@@ -94,6 +95,7 @@ export default function TeamRequirements() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white">
+      <Navbar />
       <Head>
         <title>Team Requirements | Tournament Name</title>
         <meta
@@ -103,7 +105,7 @@ export default function TeamRequirements() {
       </Head>
 
       {/* Navigation */}
-      <nav className="bg-blue-900 text-white py-4 px-6 shadow-md">
+      {/* <nav className="bg-blue-900 text-white py-4 px-6 shadow-md">
         <div className="container mx-auto flex justify-between items-center">
           <Link
             href="/"
@@ -129,7 +131,7 @@ export default function TeamRequirements() {
             </Link>
           </div>
         </div>
-      </nav>
+      </nav> */}
 
       {/* Header */}
       <header className="bg-blue-800 text-white py-16">

@@ -16,7 +16,7 @@ export default function TournamentHistory() {
       year: "2024",
       winner: {
         name: "Skylarks Fc",
-        image: "/api/placeholder/300/200",
+        image: "/assets/logos/skylarks.jpg",
       },
       runnerUp: {
         name: "Hostel Fc",
@@ -26,7 +26,7 @@ export default function TournamentHistory() {
         name: "Shakil",
         Team: "United De Galacticos",
         goals: 4,
-        image: "/api/placeholder/240/300",
+        image: "/assets/hall-of-fame/Shakil.jpg",
       },
       mvp: {
         name: "Turja",
@@ -44,17 +44,17 @@ export default function TournamentHistory() {
       year: "2023",
       winner: {
         name: " United de Galacticos",
-        image: "/api/placeholder/300/200",
+        image: "/assets/logos/united.jpg",
       },
       runnerUp: {
         name: "Skylarks Fc",
-        image: "/api/placeholder/300/200",
+        image: "/assets/logos/skylarks.jpg",
       },
       topScorer: {
         name: "Shakil",
         Team: "United De Galacticos",
         goals: 5,
-        image: "/api/placeholder/240/300",
+        image: "/assets/hall-of-fame/Shakil.jpg",
       },
       mvp: {
         name: "Ebad",
@@ -72,35 +72,35 @@ export default function TournamentHistory() {
       year: "2022",
       winner: {
         name: "Lord FC",
-        image: "/api/placeholder/300/200",
+        image: "/assets/logos/lords.jpg",
       },
       runnerUp: {
         name: "United de Galacticos",
-        image: "/api/placeholder/300/200",
+        image: "/assets/logos/united.jpg",
       },
       topScorer: {
         name: "Jabed",
         Team: "Lord FC",
         goals: 6,
-        image: "/assets/hall-of-fame/Jabed.jpg",
+        image: "/assets/hall-of-fame/Xabed.jpg",
       },
       mvp: {
         name: "Jabed",
         Team: "Lord FC",
-        image: "/assets/hall-of-fame/Jabed.jpg",
+        image: "/assets/hall-of-fame/Xabed.jpg",
       },
       bestGoalkeeper: {
         name: "Raihan",
         Team: "DEvastators Fc",
         cleanSheets: 20,
-        image: "/assets/hall-of-fame/Raihan.jpg",
+        image: "/assets/hall-of-fame/Raiyan.jpg",
       },
     },
     season4: {
       year: "2019",
       winner: {
         name: "Lord FC",
-        image: "/api/placeholder/300/200",
+        image: "/assets/logos/lords.jpg",
       },
       runnerUp: {
         name: "Blustery Risers",
@@ -128,11 +128,11 @@ export default function TournamentHistory() {
       year: "2018",
       winner: {
         name: "Galacticos",
-        image: "/api/placeholder/300/200",
+        image: "/assets/logos/galacticos.jpg",
       },
       runnerUp: {
         name: "Emperors Fc",
-        image: "/api/placeholder/300/200",
+        image: "/assets/logos/Emperors.png",
       },
       topScorer: {
         name: "Mahmud",
@@ -149,18 +149,18 @@ export default function TournamentHistory() {
         name: "Mahid ",
         Team: "Old School Fc",
         cleanSheets: 17,
-        image: "/api/placeholder/240/300",
+        image: "/assets/hall-of-fame/Mahid.jpg",
       },
     },
     season2: {
       year: "2017",
       winner: {
         name: "Skylarks",
-        image: "/api/placeholder/300/200",
+        image: "/assets/logos/skylarks.jpg",
       },
       runnerUp: {
         name: "Emperors Fc",
-        image: "/api/placeholder/300/200",
+        image: "/assets/logos/Emperors.png",
       },
       topScorer: {
         name: "Turja",
@@ -184,7 +184,7 @@ export default function TournamentHistory() {
       year: "2015",
       winner: {
         name: "Lord Fc",
-        image: "/api/placeholder/300/200",
+        image: "/assets/logos/lords.jpg",
       },
       runnerUp: {
         name: "RBP",
