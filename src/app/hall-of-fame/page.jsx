@@ -1,4 +1,5 @@
 "use client";
+import Navbar from "@/components/Navbar";
 import { Dribbble, Goal, Medal, Star, Trophy } from "lucide-react";
 
 // pages/tournament-history.jsx
@@ -11,154 +12,200 @@ export default function TournamentHistory() {
 
   // Example data - replace with your actual tournament data
   const seasons = {
-    season6: {
+    season7: {
       year: "2024",
       winner: {
-        name: "FC Barcelona",
+        name: "Skylarks Fc",
         image: "/api/placeholder/300/200",
       },
       runnerUp: {
-        name: "Real Madrid",
+        name: "Hostel Fc",
         image: "/api/placeholder/300/200",
       },
       topScorer: {
-        name: "Luis Hernandez",
-        goals: 28,
+        name: "Shakil",
+        Team: "United De Galacticos",
+        goals: 4,
         image: "/api/placeholder/240/300",
       },
       mvp: {
-        name: "Kevin De Silva",
-        image: "/api/placeholder/240/300",
+        name: "Turja",
+        Team: "Skylarks Fc",
+        image: "/assets/hall-of-fame/Turjo.jpg",
       },
       bestGoalkeeper: {
-        name: "Manuel Neumann",
+        name: "Mahin",
+        Team: "Skylarks Fc",
         cleanSheets: 18,
+        image: "/assets/hall-of-fame/Mahin.jpg",
+      },
+    },
+    season6: {
+      year: "2023",
+      winner: {
+        name: " United de Galacticos",
+        image: "/api/placeholder/300/200",
+      },
+      runnerUp: {
+        name: "Skylarks Fc",
+        image: "/api/placeholder/300/200",
+      },
+      topScorer: {
+        name: "Shakil",
+        Team: "United De Galacticos",
+        goals: 5,
         image: "/api/placeholder/240/300",
+      },
+      mvp: {
+        name: "Ebad",
+        Team: "United De Galacticos",
+        image: "/assets/hall-of-fame/Ebad.jpg",
+      },
+      bestGoalkeeper: {
+        name: "Shourav",
+        Team: "United De Galacticos",
+        cleanSheets: 22,
+        image: "/assets/hall-of-fame/Sourav.jpg",
       },
     },
     season5: {
-      year: "2023",
+      year: "2022",
       winner: {
-        name: "Bayern Munich",
+        name: "Lord FC",
         image: "/api/placeholder/300/200",
       },
       runnerUp: {
-        name: "Paris Saint-Germain",
+        name: "United de Galacticos",
         image: "/api/placeholder/300/200",
       },
       topScorer: {
-        name: "Robert Lewandski",
-        goals: 31,
-        image: "/api/placeholder/240/300",
+        name: "Jabed",
+        Team: "Lord FC",
+        goals: 6,
+        image: "/assets/hall-of-fame/Jabed.jpg",
       },
       mvp: {
-        name: "Kylian Mbappé",
-        image: "/api/placeholder/240/300",
+        name: "Jabed",
+        Team: "Lord FC",
+        image: "/assets/hall-of-fame/Jabed.jpg",
       },
       bestGoalkeeper: {
-        name: "Jan Oblak",
-        cleanSheets: 22,
-        image: "/api/placeholder/240/300",
+        name: "Raihan",
+        Team: "DEvastators Fc",
+        cleanSheets: 20,
+        image: "/assets/hall-of-fame/Raihan.jpg",
       },
     },
     season4: {
-      year: "2022",
+      year: "2019",
       winner: {
-        name: "Liverpool FC",
+        name: "Lord FC",
         image: "/api/placeholder/300/200",
       },
       runnerUp: {
-        name: "Manchester City",
-        image: "/api/placeholder/300/200",
+        name: "Blustery Risers",
+        image: "/assets/hall-of-fame/Blustery.png",
       },
       topScorer: {
-        name: "Mohammad Salah",
-        goals: 27,
-        image: "/api/placeholder/240/300",
+        name: "Titash",
+        Team: "Blustery Risers",
+        goals: 3,
+        image: "/assets/admin/Titash.jpg",
       },
       mvp: {
-        name: "Kevin De Bruyne",
-        image: "/api/placeholder/240/300",
+        name: "Turjo ",
+        Team: "Lord FC",
+        image: "/assets/hall-of-fame/Turjo.jpg",
       },
       bestGoalkeeper: {
-        name: "Alisson Becker",
-        cleanSheets: 20,
-        image: "/api/placeholder/240/300",
+        name: "Shihab ",
+        Team: "Lord FC",
+        cleanSheets: 19,
+        image: "/assets/hall-of-fame/Shihab.jpg",
       },
     },
     season3: {
-      year: "2021",
+      year: "2018",
       winner: {
-        name: "Chelsea FC",
+        name: "Galacticos",
         image: "/api/placeholder/300/200",
       },
       runnerUp: {
-        name: "Manchester United",
+        name: "Emperors Fc",
         image: "/api/placeholder/300/200",
       },
       topScorer: {
-        name: "Erling Haaland",
-        goals: 29,
+        name: "Mahmud",
+        Team: "Emperors Fc",
+        goals: 5,
         image: "/api/placeholder/240/300",
       },
       mvp: {
-        name: "N'Golo Kanté",
-        image: "/api/placeholder/240/300",
+        name: "Tofayel",
+        Team: "Galacticos Fc",
+        image: "/assets/hall-of-fame/Tofayel.jpg",
       },
       bestGoalkeeper: {
-        name: "Edouard Mendy",
-        cleanSheets: 19,
-        image: "/api/placeholder/240/300",
-      },
-    },
-    season2: {
-      year: "2020",
-      winner: {
-        name: "Atletico Madrid",
-        image: "/api/placeholder/300/200",
-      },
-      runnerUp: {
-        name: "Juventus",
-        image: "/api/placeholder/300/200",
-      },
-      topScorer: {
-        name: "Cristiano Ronaldo",
-        goals: 30,
-        image: "/api/placeholder/240/300",
-      },
-      mvp: {
-        name: "Luis Suarez",
-        image: "/api/placeholder/240/300",
-      },
-      bestGoalkeeper: {
-        name: "Thibaut Courtois",
+        name: "Mahid ",
+        Team: "Old School Fc",
         cleanSheets: 17,
         image: "/api/placeholder/240/300",
       },
     },
-    season1: {
-      year: "2019",
+    season2: {
+      year: "2017",
       winner: {
-        name: "Manchester City",
+        name: "Skylarks",
         image: "/api/placeholder/300/200",
       },
       runnerUp: {
-        name: "Tottenham Hotspur",
+        name: "Emperors Fc",
         image: "/api/placeholder/300/200",
       },
       topScorer: {
-        name: "Harry Kane",
-        goals: 25,
-        image: "/api/placeholder/240/300",
+        name: "Turja",
+        Team: "Skylarks Fc",
+        goals: 4,
+        image: "/assets/hall-of-fame/Turjo.jpg",
       },
       mvp: {
-        name: "Bernardo Silva",
-        image: "/api/placeholder/240/300",
+        name: "Imran",
+        Team: "Skylarks Fc",
+        image: "/assets/hall-of-fame/Imran.jpg",
       },
       bestGoalkeeper: {
-        name: "Ederson",
+        name: "Mahin",
+        Team: "Skylarks Fc",
         cleanSheets: 21,
-        image: "/api/placeholder/240/300",
+        image: "/assets/hall-of-fame/Mahin.jpg",
+      },
+    },
+    season1: {
+      year: "2015",
+      winner: {
+        name: "Lord Fc",
+        image: "/api/placeholder/300/200",
+      },
+      runnerUp: {
+        name: "RBP",
+        image: "/api/placeholder/300/200",
+      },
+      topScorer: {
+        name: "Reyead",
+        Team: "Lord Fc",
+        goals: 4,
+        image: "/assets/hall-of-fame/Riyad.jpg",
+      },
+      mvp: {
+        name: "Reyead",
+        Team: "Lord Fc",
+        image: "/assets/hall-of-fame/Riyad.jpg",
+      },
+      bestGoalkeeper: {
+        name: "Mahin",
+        Team: "Skylarks Fc",
+        cleanSheets: 21,
+        image: "/assets/hall-of-fame/Mahin.jpg",
       },
     },
   };
@@ -167,6 +214,7 @@ export default function TournamentHistory() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white">
+      <Navbar />
       <Head>
         <title>Tournament History</title>
         <meta
@@ -272,6 +320,9 @@ export default function TournamentHistory() {
                 <h4 className="text-xl font-bold text-blue-800">
                   {activeSeason.topScorer.name}
                 </h4>
+                <h4 className="text-xl font-bold text-blue-800">
+                  {activeSeason.topScorer.Team}
+                </h4>
                 <p className="text-blue-600 font-semibold">
                   {activeSeason.topScorer.goals} Goals
                 </p>
@@ -297,6 +348,9 @@ export default function TournamentHistory() {
                 <h4 className="text-xl font-bold text-blue-800">
                   {activeSeason.mvp.name}
                 </h4>
+                <h4 className="text-xl font-bold text-blue-800">
+                  {activeSeason.mvp.Team}
+                </h4>
                 <p className="text-blue-600 font-semibold">MVP</p>
               </div>
             </div>
@@ -319,6 +373,9 @@ export default function TournamentHistory() {
                 </div>
                 <h4 className="text-xl font-bold text-blue-800">
                   {activeSeason.bestGoalkeeper.name}
+                </h4>
+                <h4 className="text-xl font-bold text-blue-800">
+                  {activeSeason.bestGoalkeeper.Team}
                 </h4>
                 <p className="text-blue-600 font-semibold">
                   {activeSeason.bestGoalkeeper.cleanSheets} Clean Sheets
