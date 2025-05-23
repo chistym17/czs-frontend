@@ -55,6 +55,7 @@ const Navbar = () => {
     { name: "Home", path: "/" },
     { name: "About", path: "/about" },
     { name: "Teams", path: "/teams" },
+    { name: "Players", path: "/players" },
     {
       name: "Registration",
       path: "#",
@@ -62,10 +63,10 @@ const Navbar = () => {
       dropdownItems: [
         { name: "Team Registration", path: "/team-registration" },
         { name: "Player Registration", path: "/player-registration" },
-        { name: "Team Customization", path: "/team-customization" }
+        { name: "Team Customization", path: "/team-customization" },
       ],
     },
-    {name:"Contact Us", path:"/contact"}
+    { name: "Contact Us", path: "/contact" },
   ];
 
   return (
@@ -143,8 +144,6 @@ const Navbar = () => {
                 </li>
               ))}
             </ul>
-
-
           </div>
 
           {/* Mobile menu button */}
@@ -174,8 +173,9 @@ const Navbar = () => {
       {/* Mobile sidebar menu */}
       <div
         ref={mobileMenuRef}
-        className={`fixed top-0 right-0 h-full w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out z-30 ${mobileMenuOpen ? "translate-x-0" : "translate-x-full"
-          }`}
+        className={`fixed top-0 right-0 h-full w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out z-30 ${
+          mobileMenuOpen ? "translate-x-0" : "translate-x-full"
+        }`}
       >
         <div className="p-4 flex justify-between items-center border-b">
           <div className="flex items-center space-x-2">
@@ -219,8 +219,9 @@ const Navbar = () => {
                     {link.name}
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      className={`h-4 w-4 transform transition-transform ${registrationDropdownOpen ? "rotate-180" : ""
-                        }`}
+                      className={`h-4 w-4 transform transition-transform ${
+                        registrationDropdownOpen ? "rotate-180" : ""
+                      }`}
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -264,7 +265,7 @@ const Navbar = () => {
 
           {/* Admin Login in mobile menu */}
 
-          <div className="border-t mt-2 pt-2">
+          {/* <div className="border-t mt-2 pt-2">
             <Link href={"/admin/login"}>
               <div
                 className="flex items-center px-4 py-3 bg-blue-50 hover:bg-blue-100 font-sans font-semibold text-blue-600"

@@ -1,38 +1,39 @@
-'use client';
-import React, { useState } from 'react';
-import { toast, Toaster } from 'react-hot-toast';
-import Navbar from '../../components/Navbar';
+"use client";
+import { useState } from "react";
+import { toast, Toaster } from "react-hot-toast";
+import Navbar from "../../components/Navbar";
 
 const positions = [
-  'GK',
-  'CB',
-  'RB',
-  'LB',
-  'CDM',
-  'CM',
-  'CAM',
-  'RM',
-  'LM',
-  'RW',
-  'LW',
-  'CF',
-  'ST',
-  'SS',
+  "GK",
+  "CB",
+  "RB",
+  "LB",
+  "CDM",
+  "CM",
+  "CAM",
+  "RM",
+  "LM",
+  "RW",
+  "LW",
+  "CF",
+  "ST",
+  "SS",
 ];
 
 export default function PlayerRegistration() {
   const [form, setForm] = useState({
-    name: '',
+    name: "",
+    school: "",
     image: null,
-    batch: '',
-    position: '',
+    batch: "",
+    position: "",
   });
   const [preview, setPreview] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-    if (name === 'image') {
+    if (name === "image") {
       if (files && files[0]) {
         setForm((prev) => ({ ...prev, image: files[0] }));
         setPreview(URL.createObjectURL(files[0]));
@@ -43,56 +44,51 @@ export default function PlayerRegistration() {
   };
 
   const resetForm = () => {
-    setForm({ name: '', image: null, batch: '', position: '' });
+    setForm({
+      name: "",
+      school: "",
+      image: null,
+      batch: "",
+      position: "",
+    });
     setPreview(null);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Form validation
-    if (!form.name.trim()) {
-      toast.error('Please enter player name');
-      return;
-    }
-
-    if (!form.batch.trim()) {
-      toast.error('Please enter batch year');
-      return;
-    }
-
-    if (!form.position) {
-      toast.error('Please select a position');
-      return;
-    }
+    // Validation
+    if (!form.name.trim()) return toast.error("Please enter player name");
+    if (!form.school.trim()) return toast.error("Please enter school name");
+    if (!form.batch.trim()) return toast.error("Please enter batch year");
+    if (!form.position) return toast.error("Please select a position");
 
     setIsLoading(true);
-    const loadingToast = toast.loading('Registering player...');
+    const loadingToast = toast.loading("Registering player...");
 
     const formData = new FormData();
-    formData.append('name', form.name);
-    formData.append('batch', form.batch);
-    formData.append('position', form.position);
-    if (form.image) {
-      formData.append('image', form.image);
-    }
+    formData.append("name", form.name);
+    formData.append("school", form.school);
+    formData.append("batch", form.batch);
+    formData.append("position", form.position);
+    if (form.image) formData.append("image", form.image);
 
     try {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/player/register`,
         {
-          method: 'POST',
+          method: "POST",
           body: formData,
         }
       );
 
       if (!res.ok) {
         const errorData = await res.json();
-        throw new Error(errorData.message || 'Failed to register player');
+        throw new Error(errorData.message || "Failed to register player");
       }
 
       toast.dismiss(loadingToast);
-      toast.success('Player registered successfully!');
+      toast.success("Player registered successfully!");
       resetForm();
     } catch (err) {
       toast.dismiss(loadingToast);
@@ -105,85 +101,81 @@ export default function PlayerRegistration() {
   return (
     <div>
       <Navbar />
-      <div className='min-h-screen flex items-center justify-center bg-gradient-to-b from-blue-50 to-white py-8 px-4 sm:px-6 lg:px-8'>
-        <div className='w-full max-w-xl'>
-          <Toaster
-            position='top-center'
-            toastOptions={{
-              duration: 5000,
-              style: {
-                borderRadius: '10px',
-                background: '#333',
-                color: '#fff',
-              },
-              success: {
-                iconTheme: {
-                  primary: '#10B981',
-                  secondary: '#FFFFFF',
-                },
-              },
-              error: {
-                iconTheme: {
-                  primary: '#EF4444',
-                  secondary: '#FFFFFF',
-                },
-              },
-            }}
-          />
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-blue-50 to-white py-8 px-4 sm:px-6 lg:px-8">
+        <div className="w-full max-w-xl">
+          <Toaster position="top-center" />
 
           <form
-            className='bg-white rounded-2xl shadow-lg p-6 md:p-10 space-y-6'
+            className="bg-white rounded-2xl shadow-lg p-6 md:p-10 space-y-6"
             onSubmit={handleSubmit}
           >
-            <div className='text-center'>
-              <h2 className='text-2xl sm:text-3xl font-bold text-indigo-700 mb-2'>
+            <div className="text-center">
+              <h2 className="text-2xl sm:text-3xl font-bold text-indigo-700 mb-2">
                 Player Registration
               </h2>
-              <p className='text-gray-500'>Enter player details to register</p>
+              <p className="text-gray-500">Enter player details to register</p>
             </div>
 
-            <div className='space-y-5'>
-              <div className='space-y-2'>
-                <label className='block text-md font-medium text-gray-700'>
+            <div className="space-y-5">
+              {/* Name */}
+              <div className="space-y-2">
+                <label className="block text-md font-medium text-gray-700">
                   Name
                 </label>
                 <input
-                  type='text'
-                  name='name'
+                  type="text"
+                  name="name"
                   value={form.name}
                   onChange={handleChange}
-                  className='w-full px-4 py-2 border border-gray-300 rounded-lg bg-white text-black focus:outline-none focus:ring-2 focus:ring-indigo-400'
+                  className="w-full px-4 py-2 border rounded-lg bg-white"
                   placeholder="Enter player's name"
                   disabled={isLoading}
                 />
               </div>
 
-              <div className='space-y-2'>
-                <label className='block text-md font-medium text-gray-700'>
+              {/* School */}
+              <div className="space-y-2">
+                <label className="block text-md font-medium text-gray-700">
+                  School
+                </label>
+                <input
+                  type="text"
+                  name="school"
+                  value={form.school}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2 border rounded-lg bg-white"
+                  placeholder="Enter player's school"
+                  disabled={isLoading}
+                />
+              </div>
+
+              {/* Image upload */}
+              <div className="space-y-2">
+                <label className="block text-md font-medium text-gray-700">
                   Image
                 </label>
-                <div className='flex flex-col sm:flex-row gap-4 items-center'>
-                  <div className='w-full sm:w-2/3'>
+                <div className="flex flex-col sm:flex-row gap-4 items-center">
+                  <div className="w-full sm:w-2/3">
                     <input
-                      type='file'
-                      name='image'
-                      accept='image/*'
+                      type="file"
+                      name="image"
+                      accept="image/*"
                       onChange={handleChange}
-                      className='w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-black focus:outline-none'
+                      className="w-full px-3 py-2 border rounded-lg"
                       disabled={isLoading}
                     />
                   </div>
-                  <div className='w-full sm:w-1/3 flex justify-center'>
+                  <div className="w-full sm:w-1/3 flex justify-center">
                     {preview ? (
                       <img
                         src={preview}
-                        alt='Preview'
-                        className='h-24 w-24 rounded-md object-cover border border-gray-300'
+                        alt="Preview"
+                        className="h-24 w-24 rounded-md object-cover border"
                       />
                     ) : (
-                      <div className='h-24 w-24 rounded-md bg-gray-100 flex items-center justify-center border border-gray-300'>
-                        <span className='text-gray-400 text-sm text-center'>
-                          No image selected
+                      <div className="h-24 w-24 rounded-md bg-gray-100 flex items-center justify-center border">
+                        <span className="text-gray-400 text-sm text-center">
+                          No image
                         </span>
                       </div>
                     )}
@@ -191,34 +183,35 @@ export default function PlayerRegistration() {
                 </div>
               </div>
 
-              <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
-                <div className='space-y-2'>
-                  <label className='block text-md font-medium text-gray-700'>
+              {/* Batch & Position */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label className="block text-md font-medium text-gray-700">
                     Batch
                   </label>
                   <input
-                    type='text'
-                    name='batch'
+                    type="text"
+                    name="batch"
                     value={form.batch}
                     onChange={handleChange}
-                    className='w-full px-4 py-2 border border-gray-300 rounded-lg bg-white text-black focus:outline-none focus:ring-2 focus:ring-indigo-400'
-                    placeholder='e.g., 2025'
+                    className="w-full px-4 py-2 border rounded-lg bg-white"
+                    placeholder="e.g., 2025"
                     disabled={isLoading}
                   />
                 </div>
 
-                <div className='space-y-2'>
-                  <label className='block text-md font-medium text-gray-700'>
+                <div className="space-y-2">
+                  <label className="block text-md font-medium text-gray-700">
                     Position
                   </label>
                   <select
-                    name='position'
+                    name="position"
                     value={form.position}
                     onChange={handleChange}
-                    className='w-full px-4 py-2 border border-gray-300 rounded-lg bg-white text-black focus:outline-none focus:ring-2 focus:ring-indigo-400'
+                    className="w-full px-4 py-2 border rounded-lg bg-white"
                     disabled={isLoading}
                   >
-                    <option value='' disabled>
+                    <option value="" disabled>
                       Select position
                     </option>
                     {positions.map((pos) => (
@@ -231,46 +224,47 @@ export default function PlayerRegistration() {
               </div>
             </div>
 
-            <div className='flex flex-col sm:flex-row gap-3 pt-4'>
+            {/* Buttons */}
+            <div className="flex flex-col sm:flex-row gap-3 pt-4">
               <button
-                type='button'
+                type="button"
                 onClick={resetForm}
-                className='w-full sm:w-1/3 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 rounded-lg transition duration-200'
+                className="w-full sm:w-1/3 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 rounded-lg"
                 disabled={isLoading}
               >
                 Reset
               </button>
               <button
-                type='submit'
-                className='w-full sm:w-2/3 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 rounded-lg shadow transition duration-200 flex items-center justify-center'
+                type="submit"
+                className="w-full sm:w-2/3 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 rounded-lg shadow flex items-center justify-center"
                 disabled={isLoading}
               >
                 {isLoading ? (
                   <>
                     <svg
-                      className='animate-spin -ml-1 mr-2 h-4 w-4 text-white'
-                      xmlns='http://www.w3.org/2000/svg'
-                      fill='none'
-                      viewBox='0 0 24 24'
+                      className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
                     >
                       <circle
-                        className='opacity-25'
-                        cx='12'
-                        cy='12'
-                        r='10'
-                        stroke='currentColor'
-                        strokeWidth='4'
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
                       ></circle>
                       <path
-                        className='opacity-75'
-                        fill='currentColor'
-                        d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
                       ></path>
                     </svg>
                     Registering...
                   </>
                 ) : (
-                  'Register Player'
+                  "Register Player"
                 )}
               </button>
             </div>
