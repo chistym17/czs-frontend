@@ -1,4 +1,5 @@
 "use client";
+
 import { useEffect, useState } from "react";
 import Footer from "../../components/Footer";
 import Navbar from "../../components/Navbar";
@@ -12,7 +13,7 @@ const PlayersPage = () => {
     const fetchPlayers = async () => {
       try {
         const res = await fetch(
-          "https://czs-backend-53zb.onrender.com/api/player/players"
+          `${process.env.NEXT_PUBLIC_PLAYER_API_URL}/api/player/players`
         );
         if (!res.ok) throw new Error("Failed to fetch players");
         const data = await res.json();
@@ -58,8 +59,10 @@ const PlayersPage = () => {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {players.map((player) => (
-              //   <Link key={player._id} href={`/players/${player._id}`}>
-              <div className="bg-white p-4 rounded-lg shadow hover:shadow-md transition cursor-pointer text-center">
+              <div
+                key={player._id}
+                className="bg-white p-4 rounded-lg shadow hover:shadow-md transition cursor-pointer text-center"
+              >
                 {player.image && (
                   <img
                     src={player.image}
@@ -72,9 +75,8 @@ const PlayersPage = () => {
                 </h2>
                 <p className="text-gray-600">Batch: {player.batch}</p>
                 <p className="text-gray-600">Position: {player.position}</p>
-                <p className="text-gray-600">Position: {player.school}</p>
+                <p className="text-gray-600">School: {player.school}</p>
               </div>
-              //   </Link>
             ))}
           </div>
         )}

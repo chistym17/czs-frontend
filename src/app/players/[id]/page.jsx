@@ -1,11 +1,9 @@
-// app/players/[id]/page.jsx
-
 import Image from "next/image";
 
 async function getPlayer(id) {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/player/${id}`,
+      `${process.env.NEXT_PUBLIC_PLAYER_API_URL}/api/player/${id}`,
       {
         cache: "no-store",
       }
