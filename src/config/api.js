@@ -4,7 +4,7 @@ const PLAYER_API_BASE_URL = process.env.NEXT_PUBLIC_PLAYER_API_URL;
 export const API_ENDPOINTS = {
   teams: `${API_BASE_URL}/api/teams`,
   teamDetails: (id) => `${API_BASE_URL}/api/teams/${id}`,
-  players: `${PLAYER_API_BASE_URL}/api/player/players`,
+  players: `${API_BASE_URL}/api/player/players`,
 };
 
 export const fetchTeams = async () => {
