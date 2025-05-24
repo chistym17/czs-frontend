@@ -107,7 +107,7 @@ export default function TournamentHistory() {
         image: "/assets/hall-of-fame/Blustery.png",
       },
       topScorer: {
-        name: "Titash",
+        name: "titash",
         Team: "Blustery Risers",
         goals: 3,
         image: "/assets/admin/Titash.jpg",
