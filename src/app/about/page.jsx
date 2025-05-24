@@ -71,7 +71,7 @@ const page = () => {
             Meet the Team
           </h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-10">
-            {["Titash", "Jafir", "Ebad", "Riyad"].map((member, index) => (
+            {["Titash", "jafir", "ebad", "reyead"].map((member, index) => (
               <div
                 key={index}
                 className="bg-white shadow-lg rounded-lg p-6 text-center"
