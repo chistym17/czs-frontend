@@ -64,7 +64,7 @@ const RegistrationModal = ({ onClose, teamData, completePlayers }) => {
 
   const handlePlayersRegistration = async () => {
     try {
-      const playersToSend = completePlayers.slice(0, 16);
+      const playersToSend = completePlayers.slice(0, 18);
       
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/teams/update-players/${teamId}`, {
         method: 'PUT',

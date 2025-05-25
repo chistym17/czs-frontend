@@ -62,7 +62,7 @@ const EditPlayerModal = ({ isOpen, onClose, player, teamId, onUpdate }) => {
     formData.append("playerId", player._id);
     formData.append("teamId", teamId);
 
-    toast.loading("Uploading image, please wait...");
+    toast.loading("Uploading image, please wait for 5 seconds...");
 
     try {
       const response = await fetch(
@@ -238,8 +238,6 @@ const EditPlayerModal = ({ isOpen, onClose, player, teamId, onUpdate }) => {
               name="jerseyNumber"
               value={formData.jerseyNumber}
               onChange={handleChange}
-              min="1"
-              max="99"
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900"
               required
             />

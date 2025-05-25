@@ -42,7 +42,7 @@ const TeamInfoHeader = ({ team, onLogoUpload, onTeamUpdate }) => {
     }
 
     setIsUploading(true);
-    const loadingToast = toast.loading('Updating team logo, please wait...');
+    const loadingToast = toast.loading('Updating team logo, please wait for 5 seconds...');
     
     try {
       const formData = new FormData();

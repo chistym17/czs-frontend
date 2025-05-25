@@ -242,9 +242,12 @@ const TeamCustomization = () => {
 
   if (!teamData) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-800 text-2xl">Team not found</div>
+      <div className="min-h-screen bg-gray-50">
+      <Navbar />
+      <div className="flex items-center justify-center h-[calc(100vh-64px)]">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
       </div>
+    </div>
     );
   }
 
