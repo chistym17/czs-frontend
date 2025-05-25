@@ -1,29 +1,39 @@
-import { useState } from 'react';
-import Image from 'next/image';
-import { Toaster, toast } from 'react-hot-toast';
+import Image from "next/image";
+import { useState } from "react";
+import { toast } from "react-hot-toast";
 
 const POSITIONS = [
-  'GK', 'CB', 'RB', 'LB',
-  'CDM', 'CM', 'CAM',
-  'RM', 'LM', 'RW', 'LW',
-  'CF', 'ST', 'SS'
+  "GK",
+  "CB",
+  "RB",
+  "LB",
+  "CDM",
+  "CM",
+  "CAM",
+  "RM",
+  "LM",
+  "RW",
+  "LW",
+  "CF",
+  "ST",
+  "SS",
 ];
 
 const EditPlayerModal = ({ isOpen, onClose, player, teamId, onUpdate }) => {
-  const [formData, setFormData] = useState({  
-    name: player?.name || '',
-    position: player?.position || '',
-    jerseyNumber: player?.jerseyNumber || '',
-    image: player?.image || ''
+  const [formData, setFormData] = useState({
+    name: player?.name || "",
+    position: player?.position || "",
+    jerseyNumber: player?.jerseyNumber || "",
+    image: player?.image || "",
   });
   const [isLoading, setIsLoading] = useState(false);
   const [imagePreview, setImagePreview] = useState(player?.image || null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -31,13 +41,13 @@ const EditPlayerModal = ({ isOpen, onClose, player, teamId, onUpdate }) => {
     const file = e.target.files[0];
     if (!file) return;
 
-    if (!file.type.startsWith('image/')) {
-      toast.error('Please upload an image file');
+    if (!file.type.startsWith("image/")) {
+      toast.error("Please upload an image file");
       return;
     }
 
     if (file.size > 5 * 1024 * 1024) {
-      toast.error('Image size should be less than 5MB');
+      toast.error("Image size should be less than 5MB");
       return;
     }
 
@@ -48,66 +58,82 @@ const EditPlayerModal = ({ isOpen, onClose, player, teamId, onUpdate }) => {
     reader.readAsDataURL(file);
 
     const formData = new FormData();
-    formData.append('image', file);
-    formData.append('playerId', player._id);
-    formData.append('teamId', teamId);
+    formData.append("image", file);
+    formData.append("playerId", player._id);
+    formData.append("teamId", teamId);
 
-    toast.loading('Uploading image, please wait...');
+    toast.loading("Uploading image, please wait...");
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/teams/upload-player-image`, {
-        method: 'POST',
-        body: formData
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/teams/upload-player-image`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
 
       const data = await response.json();
 
-      console.log(data)
-
       if (data.success) {
         toast.dismiss();
-        setFormData(prev => ({
+        setFormData((prev) => ({
           ...prev,
-          image: data.imageUrl
+          image: data.imageUrl,
         }));
-        toast.success('Player image uploaded successfully!');
+        toast.success("Player image uploaded successfully!");
       } else {
-        throw new Error(data.message || 'Failed to upload image');
+        throw new Error(data.message || "Failed to upload image");
       }
     } catch (error) {
-      console.error('Error uploading image:', error);
-      toast.error(error.message || 'Failed to upload image');
+      console.error("Error uploading image:", error);
+      toast.error(error.message || "Failed to upload image");
     }
   };
 
-  //update player info
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/teams/${teamId}/players/${player._id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData)
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/teams/${teamId}/players/${player._id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
 
+      let data;
+      const text = await response.text();
+      try {
+        data = JSON.parse(text);
+      } catch {
+        console.error("Non-JSON response from server:", text);
+        throw new Error(
+          `Unexpected response: ${response.status} ${response.statusText}`
+        );
+      }
 
-      const data = await response.json();
-
+      if (!response.ok) {
+        throw new Error(
+          data.message || `Failed with status ${response.status}`
+        );
+      }
 
       if (data.success) {
-        toast.success('Player information updated successfully!');
+        toast.success("Player information updated successfully!");
         onUpdate(data.data);
         onClose();
       } else {
-        throw new Error(data.message || 'Failed to update player information');
+        throw new Error(data.message || "Failed to update player");
       }
     } catch (error) {
-      console.error('Error updating player:', error);
-      toast.error(error.message || 'Failed to update player information');
+      console.error("Error updating player:", error);
+      toast.error(error.message || "Failed to update player");
     } finally {
       setIsLoading(false);
     }
@@ -119,19 +145,30 @@ const EditPlayerModal = ({ isOpen, onClose, player, teamId, onUpdate }) => {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-xl p-6 w-full max-w-md">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-bold text-gray-800">Edit Player Information</h2>
+          <h2 className="text-2xl font-bold text-gray-800">
+            Edit Player Information
+          </h2>
           <button
             onClick={onClose}
             className="text-gray-500 hover:text-gray-700"
           >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
             </svg>
           </button>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Player Image */}
           <div className="flex flex-col items-center space-y-2">
             <div className="relative w-32 h-32 rounded-full overflow-hidden bg-gray-100">
               {imagePreview ? (
@@ -184,7 +221,7 @@ const EditPlayerModal = ({ isOpen, onClose, player, teamId, onUpdate }) => {
               required
             >
               <option value="">Select Position</option>
-              {POSITIONS.map(position => (
+              {POSITIONS.map((position) => (
                 <option key={position} value={position}>
                   {position}
                 </option>
@@ -221,7 +258,7 @@ const EditPlayerModal = ({ isOpen, onClose, player, teamId, onUpdate }) => {
               disabled={isLoading}
               className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
             >
-              {isLoading ? 'Saving...' : 'Save Changes'}
+              {isLoading ? "Saving..." : "Save Changes"}
             </button>
           </div>
         </form>
@@ -230,4 +267,4 @@ const EditPlayerModal = ({ isOpen, onClose, player, teamId, onUpdate }) => {
   );
 };
 
-export default EditPlayerModal; 
+export default EditPlayerModal;
