@@ -1,28 +1,40 @@
-'use client';
+"use client";
 
 // this form is used to register players to the team
 
-import { useState, useRef } from 'react';
-import { motion } from 'framer-motion';
-import { FaUser, FaTshirt, FaFutbol } from 'react-icons/fa';
+import { motion } from "framer-motion";
+import { useState } from "react";
+import { FaFutbol, FaTshirt, FaUser } from "react-icons/fa";
 
 const PlayerForm = ({ onNext, onPrevious, playerNumber, totalPlayers }) => {
   const [formData, setFormData] = useState({
-    name: '',
-    position: '',
-    jerseyNumber: ''
+    name: "",
+    position: "",
+    jerseyNumber: "",
   });
 
   const positions = [
-    'GK', 'CB', 'RB', 'LB', 'CDM', 'CM', 'CAM',
-    'RM', 'LM', 'RW', 'LW', 'CF', 'ST', 'SS'
+    "GK",
+    "CB",
+    "RB",
+    "LB",
+    "CDM",
+    "CM",
+    "CAM",
+    "RM",
+    "LM",
+    "RW",
+    "LW",
+    "CF",
+    "ST",
+    "SS",
   ];
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -42,19 +54,18 @@ const PlayerForm = ({ onNext, onPrevious, playerNumber, totalPlayers }) => {
       const currentData = { ...formData };
       await onNext(currentData);
       setFormData({
-        name: '',
-        position: '',
-        jerseyNumber: ''
+        name: "",
+        position: "",
+        jerseyNumber: "",
       });
     } else {
       alert("Please fill in all required fields correctly");
     }
   };
 
-
   const formVariants = {
     hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.4 } }
+    visible: { opacity: 1, y: 0, transition: { duration: 0.4 } },
   };
 
   return (
@@ -70,14 +81,15 @@ const PlayerForm = ({ onNext, onPrevious, playerNumber, totalPlayers }) => {
         </h2>
         <div className="h-1 w-20 bg-blue-500 rounded-full mb-2"></div>
         <p className="text-gray-500 text-xs">
-          You must add 16 players to complete registration
+          You must add 18 players to complete registration
         </p>
       </div>
 
       <div className="space-y-5">
         <div className="form-control">
-          <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-1">
-            <FaUser className="text-blue-500 text-xs" /> Player Name <span className="text-red-500">*</span>
+          <label className=" text-sm font-medium text-gray-700 mb-1 flex items-center gap-1">
+            <FaUser className="text-blue-500 text-xs" /> Player Name{" "}
+            <span className="text-red-500">*</span>
           </label>
           <input
             type="text"
@@ -92,7 +104,8 @@ const PlayerForm = ({ onNext, onPrevious, playerNumber, totalPlayers }) => {
 
         <div className="form-control">
           <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-1">
-            <FaFutbol className="text-blue-500 text-xs" /> Position <span className="text-red-500">*</span>
+            <FaFutbol className="text-blue-500 text-xs" /> Position{" "}
+            <span className="text-red-500">*</span>
           </label>
           <select
             name="position"
@@ -102,15 +115,18 @@ const PlayerForm = ({ onNext, onPrevious, playerNumber, totalPlayers }) => {
             required
           >
             <option value="">Select Position</option>
-            {positions.map(pos => (
-              <option key={pos} value={pos}>{pos}</option>
+            {positions.map((pos) => (
+              <option key={pos} value={pos}>
+                {pos}
+              </option>
             ))}
           </select>
         </div>
 
         <div className="form-control">
           <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-1">
-            <FaTshirt className="text-blue-500 text-xs" /> Jersey Number <span className="text-gray-400 text-xs">(optional)</span>
+            <FaTshirt className="text-blue-500 text-xs" /> Jersey Number{" "}
+            <span className="text-gray-400 text-xs">(optional)</span>
           </label>
           <input
             type="number"
@@ -134,7 +150,7 @@ const PlayerForm = ({ onNext, onPrevious, playerNumber, totalPlayers }) => {
             onClick={handleSubmit}
             className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-all duration-200 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-sm font-medium"
           >
-            {playerNumber < totalPlayers ? 'Next Player' : 'Complete'}
+            {playerNumber < totalPlayers ? "Next Player" : "Complete"}
           </button>
         </div>
       </div>
